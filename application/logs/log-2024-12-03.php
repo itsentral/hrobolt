@@ -108,3 +108,19 @@ ERROR - 2024-12-03 07:24:22 --> 404 Page Not Found: /index
 ERROR - 2024-12-03 07:24:24 --> 404 Page Not Found: /index
 ERROR - 2024-12-03 07:24:28 --> 404 Page Not Found: /index
 ERROR - 2024-12-03 13:26:32 --> Severity: error --> Exception: ERROR n°6 : Impossible to load the image C:/xampp_5_6/htdocshirobolt/assets/foto/LogoHiroBolt1.png C:\xampp_5_6\htdocs\hirobolt\assets\html2pdf\html2pdf\html2pdf.class.php 1319
+ERROR - 2024-12-03 14:27:11 --> Severity: Notice --> Undefined index: project C:\xampp_5_6\htdocs\hirobolt\application\modules\spk_delivery_sj\views\confirm.php 35
+ERROR - 2024-12-03 14:28:27 --> 404 Page Not Found: ../modules/spk_delivery_sj/controllers/Spk_delivery_sj/confirms
+ERROR - 2024-12-03 14:28:43 --> Severity: Notice --> Undefined index: project C:\xampp_5_6\htdocs\hirobolt\application\modules\spk_delivery_sj\views\confirm.php 35
+ERROR - 2024-12-03 15:39:22 --> Severity: Notice --> Undefined index: project C:\xampp_5_6\htdocs\hirobolt\application\modules\spk_delivery_sj\views\confirm.php 35
+ERROR - 2024-12-03 15:40:14 --> Severity: Notice --> Undefined index: project C:\xampp_5_6\htdocs\hirobolt\application\modules\spk_delivery_sj\views\confirm.php 35
+ERROR - 2024-12-03 15:40:29 --> Severity: Notice --> Undefined index: project C:\xampp_5_6\htdocs\hirobolt\application\modules\spk_delivery_sj\views\confirm.php 35
+ERROR - 2024-12-03 15:40:32 --> Severity: Notice --> Undefined index: project C:\xampp_5_6\htdocs\hirobolt\application\modules\spk_delivery_sj\views\confirm.php 35
+ERROR - 2024-12-03 15:40:42 --> Severity: Notice --> Undefined index: project C:\xampp_5_6\htdocs\hirobolt\application\modules\spk_delivery_sj\views\confirm.php 35
+ERROR - 2024-12-03 15:43:39 --> Severity: Notice --> Undefined index: project C:\xampp_5_6\htdocs\hirobolt\application\modules\spk_delivery_sj\views\confirm.php 35
+ERROR - 2024-12-03 15:43:56 --> Severity: Notice --> Undefined index: project C:\xampp_5_6\htdocs\hirobolt\application\modules\spk_delivery_sj\views\confirm.php 35
+ERROR - 2024-12-03 15:51:07 --> Severity: Notice --> Undefined index: project C:\xampp_5_6\htdocs\hirobolt\application\modules\spk_delivery_sj\views\add.php 30
+ERROR - 2024-12-03 15:51:17 --> Severity: Notice --> Undefined index: project C:\xampp_5_6\htdocs\hirobolt\application\modules\spk_delivery_sj\views\confirm.php 35
+ERROR - 2024-12-03 15:53:06 --> Severity: Notice --> Undefined index: project C:\xampp_5_6\htdocs\hirobolt\application\modules\spk_delivery_sj\views\confirm.php 35
+ERROR - 2024-12-03 15:53:58 --> Severity: Notice --> Undefined index: project C:\xampp_5_6\htdocs\hirobolt\application\modules\spk_delivery_sj\views\confirm.php 35
+ERROR - 2024-12-03 15:54:14 --> Severity: Notice --> Undefined index: project C:\xampp_5_6\htdocs\hirobolt\application\modules\spk_delivery_sj\views\confirm.php 35
+ERROR - 2024-12-03 15:54:18 --> Severity: Notice --> Undefined index: project C:\xampp_5_6\htdocs\hirobolt\application\modules\spk_delivery_sj\views\confirm.php 35
