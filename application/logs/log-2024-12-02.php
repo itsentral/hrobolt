@@ -43,3 +43,9 @@ ERROR - 2024-12-02 10:48:37 --> Severity: Warning --> Invalid argument supplied 
 ERROR - 2024-12-02 10:52:51 --> Severity: Notice --> Undefined variable: datgroupmenu /home/ssc/hirobolt/application/modules/menus/views/menus_form.php 70
 ERROR - 2024-12-02 11:46:14 --> Severity: Notice --> Use of undefined constant php - assumed 'php' /home/ssc/hirobolt/application/modules/users/views/login_animate.php 6
 ERROR - 2024-12-02 11:46:15 --> 404 Page Not Found: /index
+ERROR - 2024-12-02 16:22:15 --> Severity: Notice --> Use of undefined constant php - assumed 'php' /home/ssc/hirobolt/application/modules/users/views/login_animate.php 6
+ERROR - 2024-12-02 16:22:16 --> 404 Page Not Found: /index
+ERROR - 2024-12-02 16:56:35 --> Severity: Notice --> Use of undefined constant php - assumed 'php' /home/ssc/hirobolt/application/modules/users/views/login_animate.php 6
+ERROR - 2024-12-02 16:56:35 --> 404 Page Not Found: /index
+ERROR - 2024-12-02 16:57:11 --> Severity: Notice --> Use of undefined constant php - assumed 'php' /home/ssc/hirobolt/application/modules/users/views/login_animate.php 6
+ERROR - 2024-12-02 16:57:11 --> 404 Page Not Found: /index
