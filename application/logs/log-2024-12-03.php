@@ -89,3 +89,22 @@ ERROR - 2024-12-03 09:52:25 --> Severity: Notice --> Undefined variable: datgrou
 ERROR - 2024-12-03 09:53:28 --> Severity: Notice --> Undefined variable: datgroupmenu C:\xampp_5_6\htdocs\hirobolt\application\modules\menus\views\menus_form.php 70
 ERROR - 2024-12-03 10:07:24 --> Severity: Notice --> Undefined variable: datgroupmenu C:\xampp_5_6\htdocs\hirobolt\application\modules\menus\views\menus_form.php 70
 ERROR - 2024-12-03 04:07:29 --> 404 Page Not Found: /index
+ERROR - 2024-12-03 10:17:21 --> Query error: The user specified as a definer ('root'@'%') does not exist - Invalid query: SELECT
+				SUM(a.nilai_asset) AS total_aset,
+				SUM(a.`value`) AS total_susut,
+				SUM(b.sisa_nilai) AS total_sisa
+			FROM
+				asset a LEFT JOIN asset_nilai b ON a.kd_asset = b.kd_asset
+			WHERE 1=1
+				AND a.deleted = 'N'
+				
+				
+				AND (
+				a.nm_asset LIKE '%%'
+				OR a.category LIKE '%%'
+	        )
+ERROR - 2024-12-03 11:44:59 --> Severity: error --> Exception: ERROR n°6 : Impossible to load the image C:/xampp_5_6/htdocshirobolt/assets/foto/LogoHiroBolt1.png C:\xampp_5_6\htdocs\hirobolt\assets\html2pdf\html2pdf\html2pdf.class.php 1319
+ERROR - 2024-12-03 07:24:22 --> 404 Page Not Found: /index
+ERROR - 2024-12-03 07:24:24 --> 404 Page Not Found: /index
+ERROR - 2024-12-03 07:24:28 --> 404 Page Not Found: /index
+ERROR - 2024-12-03 13:26:32 --> Severity: error --> Exception: ERROR n°6 : Impossible to load the image C:/xampp_5_6/htdocshirobolt/assets/foto/LogoHiroBolt1.png C:\xampp_5_6\htdocs\hirobolt\assets\html2pdf\html2pdf\html2pdf.class.php 1319
