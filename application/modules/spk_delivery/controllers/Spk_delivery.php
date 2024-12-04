@@ -138,18 +138,19 @@ class Spk_delivery extends Admin_Controller
 		ob_start();
 
     $kode = $this->uri->segment(3);
+    $kode_delivery = $this->uri->segment(4);
     $data_session = $this->session->userdata;
     $session = $this->session->userdata('app_session');
     $printby = $session['id_user'];
 
     $dataArray = [];
 
-    $getData = $this->db->get_where('spk_delivery', array('no_so' => $kode))->row_array();
+    $getData = $this->db->get_where('spk_delivery', array('no_so' => $kode, 'no_delivery' => $kode_delivery))->row_array();
     $getDataDetail = $this->db->query("SELECT c.sku_varian AS kode_barang, c.nama AS nama_produk, b.`qty_so`, a.`qty_delivery`, a.no_so
                                       FROM spk_delivery_detail a 
                                       LEFT JOIN tr_sales_order_detail b ON b.`id_so_detail` = a.`id_so_det`
                                       LEFT JOIN ms_inventory_category3 c ON c.id = a.product_id
-                                      WHERE b.`no_so` = '" . $kode . "'")
+                                      WHERE b.`no_so` = '" . $kode . "' AND a.`no_delivery` = '" . $kode_delivery . "' ")
                                       ->result_array();
     $getDataHeaderSales = $this->db->query("SELECT 
                                               a.id, 
