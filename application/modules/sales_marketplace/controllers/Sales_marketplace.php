@@ -941,19 +941,32 @@ class Sales_marketplace extends Admin_Controller
 			$excel->setActiveSheetIndex(0)->setCellValue('E'.$numrow, $data['delivery_date']);
 			$excel->setActiveSheetIndex(0)->setCellValue('F'.$numrow, $data['jasa_pengiriman']);
 			$excel->setActiveSheetIndex(0)->setCellValue('G'.$numrow, $this->checkStatus($data['status']));
-			$dataSalesDetail = $this->db->query("SELECT a.*, b.nama AS product_name, b.sku_varian AS sku_varian 
+			$dataSalesDetail = $this->db->query("SELECT a.*, b.nama AS product_name, b.sku_varian AS sku_varian,
+													c.code_order_marketplace, c.marketplace, c.customer_name, c.delivery_date,
+													d.name AS jasa_pengiriman, c.status, c.total_price AS amount_total
 													FROM sales_marketplace_detail a 
 													JOIN ms_inventory_category3 b ON b.id = a.product_id 
-													WHERE a.code_order = '" . $data["code_order"] . "'")->result_array();
+													INNER JOIN sales_marketplace_header c ON a.code_order = c.code_order
+													LEFT JOIN master_pengiriman d ON d.id = c.delivery_service_id
+													WHERE a.code_order = '" . $data["code_order"] . "'
+													GROUP BY id ")->result_array();
 			$countDataDetail = count($dataSalesDetail);
 			// if ($numrow == 5) {
 			// 	$numrow = $numrow + 1;
 			// }
 			foreach($dataSalesDetail AS $datadetail) {
+				$excel->setActiveSheetIndex(0)->setCellValue('A'.$numrow, $datadetail["code_order"]);     
+				$excel->setActiveSheetIndex(0)->setCellValue('B'.$numrow, $datadetail["code_order_marketplace"]);      
+				$excel->setActiveSheetIndex(0)->setCellValue('C'.$numrow, $datadetail['marketplace']);      
+				$excel->setActiveSheetIndex(0)->setCellValue('D'.$numrow, $datadetail['customer_name']);     
+				$excel->setActiveSheetIndex(0)->setCellValue('E'.$numrow, $data['delivery_date']);
+				$excel->setActiveSheetIndex(0)->setCellValue('F'.$numrow, $datadetail['jasa_pengiriman']);
+				$excel->setActiveSheetIndex(0)->setCellValue('G'.$numrow, $this->checkStatus($datadetail['status']));
 				$excel->setActiveSheetIndex(0)->setCellValue('H'.$numrow, $datadetail['product_name']);
 				$excel->setActiveSheetIndex(0)->setCellValue('I'.$numrow, $datadetail['sku_varian']);
 				$excel->setActiveSheetIndex(0)->setCellValue('J'.$numrow, $datadetail['qty']);
 				$excel->setActiveSheetIndex(0)->setCellValue('K'.$numrow, number_format($datadetail['total_price']));
+				$excel->setActiveSheetIndex(0)->setCellValue('L'.$numrow, $datadetail['amount_total']);
 				$numrow++;
 			}
 			$numrow -= $countDataDetail;

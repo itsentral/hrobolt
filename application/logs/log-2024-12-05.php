@@ -134,3 +134,27 @@ ERROR - 2024-12-05 15:04:02 --> Severity: Parsing Error --> syntax error, unexpe
 ERROR - 2024-12-05 15:04:10 --> Severity: Parsing Error --> syntax error, unexpected end of file C:\xampp_5_6\htdocs\hrobolt\application\modules\sales_marketplace\views\index.php 796
 ERROR - 2024-12-05 15:04:19 --> Severity: Parsing Error --> syntax error, unexpected end of file C:\xampp_5_6\htdocs\hrobolt\application\modules\sales_marketplace\views\index.php 780
 ERROR - 2024-12-05 15:13:52 --> Severity: Notice --> Undefined index: project C:\xampp_5_6\htdocs\hrobolt\application\modules\spk_delivery_sj\views\confirm.php 35
+ERROR - 2024-12-05 16:34:15 --> Query error: Unknown column 'c.code_order_marketplace' in 'field list' - Invalid query: SELECT a.*, b.nama AS product_name, b.sku_varian AS sku_varian,
+													c.code_order_marketplace, c.marketplace, c.customer_name, c.delivery_date,
+													c.jasa_pengiriman, c.status
+													FROM sales_marketplace_detail a 
+													JOIN ms_inventory_category3 b ON b.id = a.product_id 
+													INNER JOIN sales_marketplace_detail c ON a.code_order = c.code_order
+													WHERE a.code_order = '240731094731003'
+													GROUP BY id 
+ERROR - 2024-12-05 16:34:39 --> Query error: Unknown column 'c.code_order_marketplace' in 'field list' - Invalid query: SELECT a.*, b.nama AS product_name, b.sku_varian AS sku_varian,
+													c.code_order_marketplace, c.marketplace, c.customer_name, c.delivery_date,
+													c.jasa_pengiriman, c.status
+													FROM sales_marketplace_detail a 
+													JOIN ms_inventory_category3 b ON b.id = a.product_id 
+													INNER JOIN sales_marketplace_detail c ON a.code_order = c.code_order
+													WHERE a.code_order = '240731094731003'
+													GROUP BY id 
+ERROR - 2024-12-05 16:36:27 --> Query error: Unknown column 'c.jasa_pengiriman' in 'field list' - Invalid query: SELECT a.*, b.nama AS product_name, b.sku_varian AS sku_varian,
+													c.code_order_marketplace, c.marketplace, c.customer_name, c.delivery_date,
+													c.jasa_pengiriman, c.status
+													FROM sales_marketplace_detail a 
+													JOIN ms_inventory_category3 b ON b.id = a.product_id 
+													INNER JOIN sales_marketplace_header c ON a.code_order = c.code_order
+													WHERE a.code_order = '240731094731003'
+													GROUP BY id 
