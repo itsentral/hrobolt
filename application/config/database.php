@@ -79,6 +79,7 @@ $db['default'] = array(
     'hostname' => 'localhost',
     'username' => 'root',
     'password' => '',
+    //'password' => 'appsystem@ssc',
     // 'password' => 'sentral2022**',
     'database' => 'hirobolt',
     'dbdriver' => 'mysqli',
