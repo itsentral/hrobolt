@@ -863,8 +863,8 @@ class Sales_marketplace extends Admin_Controller
 		$excel->setActiveSheetIndex(0)->setCellValue('F4', "Jasa Delivery");     
 		$excel->setActiveSheetIndex(0)->setCellValue('G4', "Status");
 		$excel->setActiveSheetIndex(0)->setCellValue('H4', "Detail Order");     
-		$excel->setActiveSheetIndex(0)->setCellValue('L4', "Total Qty");
-		$excel->setActiveSheetIndex(0)->setCellValue('M4', "Total Price");     
+		$excel->setActiveSheetIndex(0)->setCellValue('L4', "Total Price");
+		//$excel->setActiveSheetIndex(0)->setCellValue('M4', "Total Price");     
 
 		$excel->getActiveSheet()->mergeCells('A1:I2');
 
@@ -886,7 +886,7 @@ class Sales_marketplace extends Admin_Controller
 		$excel->getActiveSheet()->mergeCells('H4:K4');
 
 		$excel->getActiveSheet()->mergeCells('L4:L5');
-		$excel->getActiveSheet()->mergeCells('M4:M5');
+		//$excel->getActiveSheet()->mergeCells('M4:M5');
 
 		$excel->getActiveSheet()->getStyle('A1:I2')->getAlignment()->setWrapText(true);
 
@@ -898,7 +898,7 @@ class Sales_marketplace extends Admin_Controller
 		$excel->getActiveSheet()->getStyle('F4:F5')->getAlignment()->setWrapText(true);
 		$excel->getActiveSheet()->getStyle('G4:G5')->getAlignment()->setWrapText(true);
 		$excel->getActiveSheet()->getStyle('L4:L5')->getAlignment()->setWrapText(true);
-		$excel->getActiveSheet()->getStyle('M4:M5')->getAlignment()->setWrapText(true);
+		//$excel->getActiveSheet()->getStyle('M4:M5')->getAlignment()->setWrapText(true);
 
 		$excel->getActiveSheet()->getStyle('A1')->applyFromArray($style_col_header);
 
@@ -911,7 +911,7 @@ class Sales_marketplace extends Admin_Controller
 		$excel->getActiveSheet()->getStyle('G4')->applyFromArray($style_col);    
 		$excel->getActiveSheet()->getStyle('H4:K5')->applyFromArray($style_col);   
 		$excel->getActiveSheet()->getStyle('L4')->applyFromArray($style_col);
-		$excel->getActiveSheet()->getStyle('M4')->applyFromArray($style_col);    
+		//$excel->getActiveSheet()->getStyle('M4')->applyFromArray($style_col);    
 
 		$excel->getActiveSheet()->getColumnDimension('A')->setWidth(27.86);    
 		$excel->getActiveSheet()->getColumnDimension('B')->setWidth(27.86);    
@@ -925,7 +925,7 @@ class Sales_marketplace extends Admin_Controller
 		$excel->getActiveSheet()->getColumnDimension('J')->setWidth(19.29);    
 		$excel->getActiveSheet()->getColumnDimension('K')->setWidth(19.29);   
 		$excel->getActiveSheet()->getColumnDimension('L')->setWidth(19.29);    
-		$excel->getActiveSheet()->getColumnDimension('M')->setWidth(19.29);
+		//$excel->getActiveSheet()->getColumnDimension('M')->setWidth(19.29);
 
 		$dataSales = $this->db->query("SELECT a.*, b.name AS jasa_pengiriman FROM sales_marketplace_header a LEFT JOIN master_pengiriman b ON b.id = a.delivery_service_id")->result_array();
 
@@ -957,8 +957,8 @@ class Sales_marketplace extends Admin_Controller
 				$numrow++;
 			}
 			$numrow -= $countDataDetail;
-			$excel->setActiveSheetIndex(0)->setCellValue('L'.$numrow, $data['total_qty']);
-			$excel->setActiveSheetIndex(0)->setCellValue('M'.$numrow, $data['total_price']);
+			$excel->setActiveSheetIndex(0)->setCellValue('L'.$numrow, $data['total_price']);
+			//$excel->setActiveSheetIndex(0)->setCellValue('M'.$numrow, $data['total_price']);
 			$numrow += $countDataDetail;
 			// $numrow++;
 		}

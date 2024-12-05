@@ -583,10 +583,11 @@ function getStokBarangAll()
 											b.konversi
 										')
 		->group_by('a.id_material')
-		->where_in('a.id_gudang', [17, 19, 21])
+		->where_in('a.id_gudang', [17, 19, 21, 2])
 		->join('accessories b', 'a.id_material=b.id')
 		->get('warehouse_stock a')
 		->result_array();
+		//echo '<pre>' . $CI->db->last_query() . '</pre>';
 	$ArrGetCategory 	= [];
 	foreach ($listGetCategory as $key => $value) {
 		$stok_packing = 0;
