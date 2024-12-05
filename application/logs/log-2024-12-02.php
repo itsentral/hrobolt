@@ -43,3 +43,11 @@ ERROR - 2024-12-02 10:48:37 --> Severity: Warning --> Invalid argument supplied 
 ERROR - 2024-12-02 10:52:51 --> Severity: Notice --> Undefined variable: datgroupmenu /home/ssc/hirobolt/application/modules/menus/views/menus_form.php 70
 ERROR - 2024-12-02 11:46:14 --> Severity: Notice --> Use of undefined constant php - assumed 'php' /home/ssc/hirobolt/application/modules/users/views/login_animate.php 6
 ERROR - 2024-12-02 11:46:15 --> 404 Page Not Found: /index
+ERROR - 2024-12-02 17:08:15 --> Severity: Warning --> Trying to access array offset on value of type null C:\xampp\htdocs\hirobolt\application\modules\users\libraries\Auth.php 28
+ERROR - 2024-12-02 17:08:15 --> Severity: Warning --> Trying to access array offset on value of type null C:\xampp\htdocs\hirobolt\application\modules\users\libraries\Auth.php 28
+ERROR - 2024-12-02 17:08:15 --> Query error: Table 'hirobolt.users' doesn't exist - Invalid query: SELECT *
+FROM `users`
+JOIN `user_groups` ON `users`.`id_user` = `user_groups`.`id_user`
+WHERE `users`.`id_user` IS NULL
+AND `id_group` = 1
+ERROR - 2024-12-02 17:08:15 --> Severity: Warning --> Cannot modify header information - headers already sent by (output started at C:\xampp\htdocs\hirobolt\system\core\Exceptions.php:272) C:\xampp\htdocs\hirobolt\system\core\Common.php 571

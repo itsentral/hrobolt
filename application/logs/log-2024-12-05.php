@@ -79,3 +79,12 @@ ERROR - 2024-12-05 12:59:45 --> Severity: Notice --> Undefined index: project C:
 ERROR - 2024-12-05 13:04:30 --> Severity: Parsing Error --> syntax error, unexpected end of file C:\xampp_5_6\htdocs\hrobolt\application\modules\inventory_4\views\edit_inventory.php 655
 ERROR - 2024-12-05 13:04:58 --> Severity: Parsing Error --> syntax error, unexpected end of file C:\xampp_5_6\htdocs\hrobolt\application\modules\inventory_4\views\form_inventory.php 805
 ERROR - 2024-12-05 13:06:20 --> Severity: Notice --> Undefined index: project C:\xampp_5_6\htdocs\hrobolt\application\modules\spk_delivery_sj\views\confirm.php 35
+ERROR - 2024-12-05 13:19:43 --> Severity: Parsing Error --> syntax error, unexpected '<<' (T_SL), expecting ')' C:\xampp_5_6\htdocs\hrobolt\application\config\database.php 82
+ERROR - 2024-12-05 13:20:03 --> Severity: Notice --> Undefined index: project C:\xampp_5_6\htdocs\hrobolt\application\modules\spk_delivery_sj\views\confirm.php 35
+ERROR - 2024-12-05 13:20:54 --> Severity: Notice --> Undefined index: project C:\xampp_5_6\htdocs\hrobolt\application\modules\spk_delivery_sj\views\confirm.php 35
+ERROR - 2024-12-05 13:20:56 --> Severity: Notice --> Undefined index: project C:\xampp_5_6\htdocs\hrobolt\application\modules\spk_delivery_sj\views\confirm.php 35
+ERROR - 2024-12-05 13:22:15 --> Severity: error --> Exception: ERROR n°6 : Impossible to load the image C:/xampp_5_6/htdocshirobolt/assets/foto/LogoHiroBolt1.png C:\xampp_5_6\htdocs\hrobolt\assets\html2pdf\html2pdf\html2pdf.class.php 1319
+ERROR - 2024-12-05 13:22:17 --> Severity: error --> Exception: ERROR n°6 : Impossible to load the image C:/xampp_5_6/htdocshirobolt/assets/foto/LogoHiroBolt1.png C:\xampp_5_6\htdocs\hrobolt\assets\html2pdf\html2pdf\html2pdf.class.php 1319
+ERROR - 2024-12-05 13:22:27 --> Severity: Notice --> Undefined index: project C:\xampp_5_6\htdocs\hrobolt\application\modules\spk_delivery_sj\views\confirm.php 35
+ERROR - 2024-12-05 13:23:05 --> Severity: Notice --> Undefined index: project C:\xampp_5_6\htdocs\hrobolt\application\modules\spk_delivery_sj\views\confirm.php 35
+ERROR - 2024-12-05 13:23:15 --> Severity: Notice --> Undefined index: project C:\xampp_5_6\htdocs\hrobolt\application\modules\spk_delivery_sj\views\confirm.php 35

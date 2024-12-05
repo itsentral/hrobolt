@@ -150,7 +150,7 @@ class Spk_delivery extends Admin_Controller
                                       FROM spk_delivery_detail a 
                                       LEFT JOIN tr_sales_order_detail b ON b.`id_so_detail` = a.`id_so_det`
                                       LEFT JOIN ms_inventory_category3 c ON c.id = a.product_id
-                                      WHERE b.`no_so` = '" . $kode . "' AND a.no_delivery = '" . $kode_delivery . "' ")
+                                      WHERE b.`no_so` = '" . $kode . "' AND a.`no_delivery` = '" . $kode_delivery . "' ")
                                       ->result_array();
     $getDataHeaderSales = $this->db->query("SELECT 
                                               a.id, 
