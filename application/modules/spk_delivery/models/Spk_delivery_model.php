@@ -82,7 +82,7 @@ class Spk_delivery_model extends BF_Model
       $getSPKDelivery = $this->db->get_where('spk_delivery', array('no_so' => $row['no_so'], 'deleted_date' => NULL))->result_array();
       $LI_A = "";
       foreach ($getSPKDelivery as $key => $value) {
-        $LI_A .= "<li><a href='" . base_url('spk_delivery/print_spk/' . $value['no_so']) . "' target='_blank'>" . $value['no_delivery'] . "</a></li>";
+        $LI_A .= "<li><a href='" . base_url('spk_delivery/print_spk/' . $value['no_so'] . '/' . $value['no_delivery'] ) . "' target='_blank'>" . $value['no_delivery'] . "</a></li>";
       }
 
       if ($row['total_delivery'] > 0) {

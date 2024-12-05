@@ -548,7 +548,7 @@ class Spk_delivery_sj extends Admin_Controller
       echo json_encode($Arr_Data);
     } else {
       $no_spk = $this->uri->segment(3) . "/" . $this->uri->segment(4) . "/" . $this->uri->segment(5) . "/" . $this->uri->segment(6) . "/" . $this->uri->segment(7);
-      
+      $tanda = null;
       $QUERY = "SELECT
                     a.no_so,
                     a.no_penawaran,
@@ -578,11 +578,18 @@ class Spk_delivery_sj extends Admin_Controller
         ->select('a.*')
         ->get_where('spk_delivery_detail_sj a', array('a.no_delivery' => $no_spk))->result_array();
 
+      $QueryJmlhProduct = "SELECT COUNT(*) total_product FROM spk_delivery_detail_sj WHERE no_delivery = '".$no_spk."' ";
+      $getJmlhProduct = $this->db->query($QueryJmlhProduct)->result_array();
+      foreach ($getJmlhProduct as $key => $valueProduct) {
+        $total_product = $valueProduct['total_product'];
+      }
+
       $data = [
         'getData' => $getData,
         'GET_DET_Lv4' => get_inventory_lv4(),
         'getDetail' => $getDetail,
-        'tanda' => $tanda
+        'tanda' => $tanda,
+        'totalProduct' => $total_product
       ];
 
       $this->template->title('Delivery Receipt');
