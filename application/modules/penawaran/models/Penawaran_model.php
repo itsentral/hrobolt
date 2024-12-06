@@ -127,6 +127,7 @@ class Penawaran_model extends BF_Model
       $this->db->where($where2);
       $this->db->order_by('a.no_penawaran', DESC);
       $query = $this->db->get();	
+      //echo $this->db->last_query();die();
       return $query->result();
     }
 

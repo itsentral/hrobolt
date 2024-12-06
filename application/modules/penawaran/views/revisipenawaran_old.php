@@ -152,15 +152,16 @@
 							<table class='table table-bordered table-striped'>
 									<thead>
 										<tr class='bg-blue'>
-											<th width='10%'>Nama Produk</th>
-											<th width='10%'>Spesifikasi</th>
-											<th width='10%'>Qty (Set)</th>
-											<th width='20%'>Qty Aktual</th>
-											<th width='10%'>Harga</th>
-											<th width='10%'>Diskon</th>									
-											<th width='10%'>Harga Diskon</th>										
-											<th width='20%'>Total Harga</th>																						
-											<th width='10%'>Aksi</th>
+											
+											<th width='30%'>Produk</th>
+											<th width='7%'>Qty <br> Penawaran</th>
+											<th width='7%'>Harga <br> Produk</th>
+											<th width='7%'>Stok <br> Tersedia</th>
+											<th width='7%'>Potensial <br> Loss</th>											
+											<th width='7%'>Diskon %</th>
+											<th width='7%'>Freight Cost</th>											
+											<th width='7%'>Total Harga</th>																						
+											<th width='5%'>Aksi</th>
 										</tr>
 									</thead>
 									<tbody id="list_spk">
@@ -181,15 +182,17 @@
                                                     }
                                         echo	"</select>
                                             </td>
-											<td id='spesifikasi_$loop'></td>
-											<td id='nama_produk_$loop' hidden><input type='text' value='$dt_spk->nama_produk' class='form-control input-sm' readonly id='used_nama_produk_$loop' required name='dt[$loop][nama_produk]'></td>
-											<td id='qty_$loop'><input type='text' value='$dt_spk->qty' class='form-control input-sm' id='used_qty_$loop' required name='dt[$loop][qty]' onkeyup='HitungTotal($loop)'></td>
-											<td id='qty_actual_$loop'></td>
-											<td id='harga_satuan_$loop'><input type='text' value='$dt_spk->harga_satuan' class='form-control input-sm' id='used_harga_satuan_$loop' required name='dt[$loop][harga_satuan]'></td>
-											<td id='diskon_$loop'><input type='text' value='$dt_spk->diskon' class='form-control'  id='used_diskon_$loop' required name='dt[$loop][diskon]' onblur='HitungTotal($loop)'></td>
-											<td id='nilai_diskon_$loop'><input type='text' value='$dt_spk->nilai_diskon' class='form-control'  id='used_nilai_diskon_$loop' required name='dt[$loop][nilai_diskon]'></td>
-											<td id='total_harga_$loop'><input type='text' value='$dt_spk->total_harga' class='form-control input-sm total' id='used_total_harga_$loop' required name='dt[$loop][total_harga]' readonly></td>
-											<td align='center'>
+                                            <td id='nama_produk_$loop' hidden><input type='text' value='$dt_spk->nama_produk' class='form-control input-sm' readonly id='used_nama_produk_$loop' required name='dt[$loop][nama_produk]'></td>
+                                            <td id='qty_$loop'><input type='text' value='$dt_spk->qty' class='form-control input-sm' id='used_qty_$loop' required name='dt[$loop][qty]' onkeyup='HitungTotal($loop)' placeholder='test1'></td>
+                                            <td id='harga_satuan_$loop'><input type='text' value='$dt_spk->harga_satuan' class='form-control input-sm' id='used_harga_satuan_$loop' required name='dt[$loop][harga_satuan]' readonly placeholder='test2'></td>
+                                            <td id='stok_tersedia_$loop'><input type='text' value='$dt_spk->stok_tersedia' class='form-control input-sm' id='used_stok_tersedia_$loop' required name='dt[$loop][stok_tersedia]' onblur='HitungLoss($loop)' readonly placeholder='test3'></td>
+                                            <td id='potensial_loss_$loop'><input type='text' value='$dt_spk->potensial_loss' class='form-control input-sm' id='used_potensial_loss_$loop' required name='dt[$loop][potensial_loss]' readonly></td>
+											<td id='compare_diskon_$loop' hidden><input type='text' value='$dt_spk->diskon_compare' class='form-control'  id='used_compare_diskon_$loop' required name='dt[$loop][compare_diskon]'></td>
+                                            <td id='diskon_$loop'><input type='text' value='$dt_spk->diskon' class='form-control'  id='used_diskon_$loop' required name='dt[$loop][diskon]' onkeyup='HitungTotal($loop)'></td>
+                                            <td id='nilai_diskon_$loop' hidden><input type='text' value='$dt_spk->nilai_diskon' class='form-control'  id='used_nilai_diskon_$loop' required name='dt[$loop][nilai_diskon]'></td>
+                                            <td id='freight_cost_$loop'><input type='text' value='$dt_spk->freight_cost' class='form-control input-sm' id='used_freight_cost_$loop' required name='dt[$loop][freight_cost]' onblur='Freight($loop)'></td>
+                                            <td id='total_harga_$loop'><input type='text' value='$dt_spk->total_harga' class='form-control input-sm total' id='used_total_harga_$loop' required name='dt[$loop][total_harga]' readonly></td>
+                                            <td align='center'>
                                                 <button type='button' class='btn btn-sm btn-danger' title='Hapus Data' data-role='qtip' onClick='return HapusItem($loop);'><i class='fa fa-close'></i></button>
                                             </td>
                                             
@@ -409,7 +412,7 @@ function DelItem(id){
 	 
 	 $.ajax({
 		 type:"GET",
-		 url:siteurl+'penawaran/GetProduk',
+		 url:siteurl+'penawaran/GetProdukRevisi',
 		 data:"jumlah="+klik,
 		 success:function(html){
 			$("#list_spk").append(html);
@@ -443,15 +446,10 @@ function DelItem(id){
             type:"GET",
             url:siteurl+'penawaran/CariNamaProduk',
             data:"id_category3="+id_material+"&id="+id,
-            success:function(data){
-				if (data.code == 200) {
-					//console.log(data);
-					//exit();
-					$('#nama_produk_'+id).html(data.nama_produk);
-					$('#spesifikasi_'+id).html(data.spesifikasi);
-					$('#qty_actual_'+id).html(data.qty_actual);
-					$('#used_qty_'+id).val('');
-				}		
+            success:function(html){
+               $('#nama_produk_'+id).html(html);
+			   $('#used_qty_'+id).val('');
+			  
             }
         });
 
@@ -462,7 +460,7 @@ function DelItem(id){
             success:function(html){
                $('#harga_satuan_'+id).html(html);
 			   $('#used_qty_'+id).val('');
-			  
+			   
             }
         });
 		$.ajax({
@@ -472,7 +470,7 @@ function DelItem(id){
             success:function(html){
                $('#diskon_'+id).html(html);
 			   $('#used_qty_'+id).val('');
-			  
+			 
             }
         });
 		
@@ -495,9 +493,16 @@ function DelItem(id){
             data:"id_category3="+id_material+"&id="+id+"&top="+id_top,
             success:function(html){
                $('#stok_tersedia_'+id).html(html);
+
 			   $('#used_qty_'+id).val('');
+
             }
         });
+
+      
+
+
+
 	}
 
 	function Freight(id)
@@ -510,30 +515,6 @@ function DelItem(id){
 		}
 
 		function HitungTotal(id){
-	    var qty = $('#used_qty_'+id).val();
-		var qty_stok = $('#used_stok_tersedia_'+id).val();
-		var harga = $('#used_harga_satuan_'+id).val().split(",").join("");
-		var diskon = $('#used_diskon_'+id).val();
-		var status = $('#order_sts').val(); 
-
-		// var valDiscon = getNum(diskon)
-		// var valDisconcompare = getNum(diskonCompare)
-
-		// var valqty      = getNum(qty)
-		// var valqty_stok = getNum(qty_stok)
-		
-		var totalBerat = getNum(qty) * getNum(harga);
-		var nilai_diskon = (getNum(diskon) * getNum(totalBerat))/100;
-		var total_harga =  getNum(totalBerat) - getNum(nilai_diskon);
-
-		$('#used_total_harga_'+id).val(number_format(total_harga,2));	
-		$('#used_nilai_diskon_'+id).val(number_format(nilai_diskon,2));	
-			
-		// HitungLoss(id);
-		totalBalanced();
-	}
-
-		function HitungTotal_old(id){
 	    var qty=$('#used_qty_'+id).val();
 		var harga=$('#used_harga_satuan_'+id).val().split(",").join("");
 		var diskon=$('#used_diskon_'+id).val();
@@ -541,17 +522,17 @@ function DelItem(id){
 		var freight=$('#used_freight_cost_'+id).val().split(",").join("");
 		
 		
-		if (diskon > diskonCompare) {
-				swal({
-					title: "Warning!",
-					text: "Diskon Melebihi Ketentuan!",
-					type: "warning",
-					timer: 3000
-				});
-				$('#used_diskon_'+id).val(diskonCompare);
-				return false;
-		}else 
-		{
+		//if (diskon > diskonCompare) {
+		//		swal({
+		//			title: "Warning!",
+		//			text: "Diskon Melebihi Ketentuan!",
+		//			type: "warning",
+		//			timer: 3000
+		//		});
+		//		$('#used_diskon_'+id).val(diskonCompare);
+		//		return false;
+		//}else 
+		//{
 		
 		var totalBerat = getNum(qty) * getNum(harga);
 		var nilai_diskon = (getNum(diskon) * getNum(totalBerat))/100;
@@ -568,7 +549,7 @@ function DelItem(id){
 		totalBalanced();
 		
 		
-		}
+		//}
 
 		
 			

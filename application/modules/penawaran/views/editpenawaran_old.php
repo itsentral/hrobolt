@@ -13,7 +13,7 @@
 			<div class="col-sm-12">
 				<div class="input_fields_wrap2">
 			<div class="row">
-		<center><label for="customer" ><h3>Penawaran</h3></label></center>
+		<center><label for="customer"><h3>Penawaran</h3></label></center>
 		<div class="col-sm-12">
 		    <div class="col-sm-6">
 		        <div class="form-group row">
@@ -24,7 +24,7 @@
 				        <input type="text" class="form-control" id="no_penawaran" value="<?= $hd->no_penawaran?>" required name="no_penawaran" readonly placeholder="No.CRCL">
 			        </div>
 			        <div class="col-md-8">
-				        <input type="text" class="form-control" id="no_surat"  value="<?= $hd->no_revisi?>" required name="no_surat" readonly placeholder="No.Penawaran">
+				        <input type="text" class="form-control" id="no_surat"  value="<?= $hd->no_surat?>" required name="no_surat" readonly placeholder="No.Penawaran">
 			        </div>
 		        </div>
 		    </div>
@@ -48,9 +48,9 @@
                     <div class="col-md-8">
                         <select id="id_customer" name="id_customer" class="form-control select" onchange="get_customer()" required>
                             <option value="">--Pilih--</option>
-                             	<?php foreach ($results['customers'] as $customers){
-                             		$select1 = $hd->id_customer == $customers->id_customer ? 'selected' : '';	?>
-                            		<option value="<?= $customers->id_customer?>"<?= $select1 ?>><?= strtoupper(strtolower($customers->nm_customer))?></option>
+                             <?php foreach ($results['customers'] as $customers){
+                             $select1 = $hd->id_customer == $customers->id_customer ? 'selected' : '';	?>
+                            <option value="<?= $customers->id_customer?>"<?= $select1 ?>><?= strtoupper(strtolower($customers->nm_customer))?></option>
                                 <?php } ?>
                         </select>
                     </div>
@@ -89,10 +89,8 @@
 				    <div class='col-md-4'>
 					    <label for='id_category_supplier'>PIC Customer</label>
 				    </div>
-				    <div class='col-md-8' id="pic_slot" >
-					    <select id='pic_customer' name='pic_customer' class='form-control select' required>
-						    <option value="<?= $hd->pic_customer?>" selected><?= strtoupper(strtolower($hd->pic_customer))?></option>
-					    </select>
+				    <div class='col-md-8' id="pic_slot">
+						<input type="text" class="form-control" id='pic_customer' name='pic_customer' value="<?= strtoupper($hd->pic_customer) ?>">
 				    </div>
 			    </div>
 		    </div>
@@ -126,10 +124,10 @@
                            <?php if($hd->order_status=='stk'){ ?>
 						    <option value="stk" selected>Stock</option>
                             <option value="ind" >Indent</option>
-                            <?php } else if($hd->order_status=='ind'){?>
+                            <?php } elseif($hd->order_status=='ind'){?>
                             <option value="stk" >Stock</option>
                             <option value="ind" selected>Indent</option>
-                             <?php } else { ?>
+                            <?php } else { ?>
                             <option value="stk" >Stock</option>
                             <option value="ind" >Indent</option>
                             <?php } ?>
@@ -145,30 +143,39 @@
 					    <div class="col-sm-12">
 						    <?php if(empty($results['view'])){ ?>
 						    <div class="form-group row">
-								<button type='button' class='btn btn-sm btn-success' title='Ambil' id='tbh_ata' data-role='qtip' data-klik='0' ><i class='fa fa-plus'></i>Add</button>
+								<button type='button' class='btn btn-sm btn-success' title='Ambil' id='tbh_ata' data-role='qtip' data-klik='0'  ><i class='fa fa-plus'></i> Add</button>
 							</div>
 						    <?php } ?>
 							<div class="form-group row" >
-							<table class='table table-bordered table-striped'>
+								<table class='table table-bordered table-striped'>
 									<thead>
 										<tr class='bg-blue'>
+											
 											<th width='10%'>Nama Produk</th>
 											<th width='10%'>Spesifikasi</th>
 											<th width='10%'>Qty (Set)</th>
-											<th width='20%'>Qty Aktual</th>
 											<th width='10%'>Harga</th>
 											<th width='10%'>Diskon</th>									
 											<th width='10%'>Harga Diskon</th>										
 											<th width='20%'>Total Harga</th>																						
-											<th width='10%'>Aksi</th>
+											<th width='20%'>Aksi</th>
 										</tr>
 									</thead>
 									<tbody id="list_spk">
                                     <?php $loop=0;
-									foreach ($results['detail'] as $dt_spk){$loop++; 
-
+									foreach ($results['detail'] as $dt_spk){
+										$loop++; 
                                         $customers = $this->penawaran_model->get_data('master_customers','deleted',$deleted);
 		                                $material = $this->db->query("SELECT a.* FROM ms_inventory_category3 as a ")->result();
+										$materialproduk = $this->db->query("SELECT * FROM ms_inventory_category3 WHERE id = $dt_spk->id_product")->result();
+										$spesifikasiProduk = "
+											<ul>
+												<li>Panjang : " . $materialproduk[0]->panjang . " " . $materialproduk[0]->satuan_volume . "
+												<li>Grade : " . $materialproduk[0]->grade . "
+												<li>Merk : " . $materialproduk[0]->merk . "
+												<li>Diameter : " . $materialproduk[0]->diameter . " 
+											</ul>
+										";
                                         echo "
                                         <tr id='tr_$loop'>
                                            
@@ -177,27 +184,26 @@
                                                     <option value=''>-Pilih-</option>";	
                                                     foreach($material as $produk){
                                                         $select = $dt_spk->id_product == $produk->id ? 'selected' : '';				
-                                                        echo"<option value='$produk->id' $select>$produk->nama|$produk->kode_barang</option>";
+                                                        echo"<option value='$produk->id' $select>$produk->nama|$produk->sku_varian</option>"; 
                                                     }
                                         echo	"</select>
                                             </td>
-											<td id='spesifikasi_$loop'></td>
-											<td id='nama_produk_$loop' hidden><input type='text' value='$dt_spk->nama_produk' class='form-control input-sm' readonly id='used_nama_produk_$loop' required name='dt[$loop][nama_produk]'></td>
-											<td id='qty_$loop'><input type='text' value='$dt_spk->qty' class='form-control input-sm' id='used_qty_$loop' required name='dt[$loop][qty]' onkeyup='HitungTotal($loop)'></td>
-											<td id='qty_actual_$loop'></td>
-											<td id='harga_satuan_$loop'><input type='text' value='$dt_spk->harga_satuan' class='form-control input-sm' id='used_harga_satuan_$loop' required name='dt[$loop][harga_satuan]'></td>
-											<td id='diskon_$loop'><input type='text' value='$dt_spk->diskon' class='form-control'  id='used_diskon_$loop' required name='dt[$loop][diskon]' onblur='HitungTotal($loop)'></td>
-											<td id='nilai_diskon_$loop'><input type='text' value='$dt_spk->nilai_diskon' class='form-control'  id='used_nilai_diskon_$loop' required name='dt[$loop][nilai_diskon]'></td>
-											<td id='total_harga_$loop'><input type='text' value='$dt_spk->total_harga' class='form-control input-sm total' id='used_total_harga_$loop' required name='dt[$loop][total_harga]' readonly></td>
-											<td align='center'>
+											<td id='spesifikasi_$loop'>$spesifikasiProduk</td>
+                                            <td id='nama_produk_$loop' hidden><input type='text' value='$dt_spk->nama_produk' class='form-control input-sm' readonly id='used_nama_produk_$loop' required name='dt[$loop][nama_produk]'></td>
+                                            <td id='qty_$loop'><input type='text' value='$dt_spk->qty' class='form-control input-sm' id='used_qty_$loop' required name='dt[$loop][qty]' onkeyup='HitungTotal($loop)'></td>
+                                            <td id='harga_satuan_$loop'><input type='text' value='" . number_format($dt_spk->harga_satuan) . "' class='form-control input-sm' id='used_harga_satuan_$loop' required name='dt[$loop][harga_satuan]' readonly></td>
+                                            <td id='diskon_$loop'><input type='text' value='$dt_spk->diskon' class='form-control'  id='used_diskon_$loop' required name='dt[$loop][diskon]' onkeyup='HitungTotal($loop)'></td>
+                                            <td id='nilai_diskon_$loop'><input type='text' value='" . number_format($dt_spk->nilai_diskon) . "' readonly class='form-control'  id='used_nilai_diskon_$loop' required name='dt[$loop][nilai_diskon]'></td>
+                                            <td id='total_harga_$loop'><input type='text' value='" . number_format($dt_spk->total_harga) . "' class='form-control input-sm total' id='used_total_harga_$loop' required name='dt[$loop][total_harga]' readonly></td>
+                                            <td align='center'>
                                                 <button type='button' class='btn btn-sm btn-danger' title='Hapus Data' data-role='qtip' onClick='return HapusItem($loop);'><i class='fa fa-close'></i></button>
                                             </td>
                                             
                                         </tr>";
                                      }
                                     ?>
-
-									</tbody> 
+ 
+									</tbody>
 									<tfoot>
 									    <tr>
 											
@@ -208,7 +214,7 @@
 											<th width='7%'></th>
 											<th width='7%'><b>Total</b></th>											
 											<th width='7%'></th>                                            
-                                            <th width='7%'><input type='text' class='form-control totalproduk' id='totalproduk'  name='totalproduk' readonly value="<?= $hd->nilai_penawaran?>" ></th>										
+                                            <th width='7%'><input type='text' class='form-control totalproduk' id='totalproduk'  name='totalproduk' readonly value="<?= number_format($hd->nilai_penawaran) ?>" ></th>										
                                             	
 										</tr>
 										<tr>
@@ -220,11 +226,10 @@
 											<th width='7%'></th>
 											<th width='7%'><b>PPN</b></th>											
 											<th width='7%'><input type='text' class='form-control ppn' id='ppn'  name='ppn' onblur='hitungPpn()' value="<?= $hd->ppn?>" ></th>                                            
-                                            <th width='7%'><input type='text' class='form-control totalppn' id='totalppn'  name='totalppn' value="<?= $hd->nilai_ppn?>" readonly ></th>										
+                                            <th width='7%'><input type='text' class='form-control totalppn' id='totalppn'  name='totalppn' value="<?= number_format($hd->nilai_ppn) ?>" readonly ></th>										
                                             	
 										</tr>
 										<tr>
-											
 											<th width='10%'></th>
 											<th width='7%'></th>
 											<th width='7%'></th>
@@ -232,10 +237,8 @@
 											<th width='7%'></th>
 											<th width='7%'><b>Grand Total</b></th>											
 											<th width='7%'></th>                                            
-                                            <th width='7%'><input type='text' class='form-control grandtotal' id='grandtotal'  name='grandtotal' value="<?= $hd->grand_total?>" readonly ></th>										
-                                            	
+                                            <th width='7%'><input type='text' class='form-control grandtotal' id='grandtotal'  name='grandtotal' value="<?= number_format($hd->grand_total) ?>" readonly ></th>
 										</tr>
-									   										
 									</tfoot>
 								</table>
 						    </div>
@@ -243,8 +246,8 @@
 				    </div>
 					
                     <center>
-                    <button type="submit" class="btn btn-success btn-sm" name="save" id="simpan-com"><i class="fa fa-save"></i> Simpan Revisi</button>
-                    <a class="btn btn-danger btn-sm" href="<?= base_url('penawaran/') ?>"  title="Edit">Kembali</a>
+                    <button type="submit" class="btn btn-success btn-sm" name="save" id="simpan-com"><i class="fa fa-save"></i> Simpan</button>
+                    <a class="btn btn-danger btn-sm" href="<?= base_url('/penawaran/') ?>"  title="Edit"> Kembali</a>
                     </center>
 		</form>		  
 	</div>
@@ -258,184 +261,177 @@
 	var base_url			= '<?php echo base_url(); ?>';
 	var active_controller	= '<?php echo($this->uri->segment(1)); ?>';
 	$(document).ready(function(){	
-			var max_fields2      = 10; //maximum input boxes allowed
-			var wrapper2         = $(".input_fields_wrap2"); //Fields wrapper
-			var add_button2      = $(".add_field_button2"); //Add button ID		
+		var max_fields2      = 10; //maximum input boxes allowed
+		var wrapper2         = $(".input_fields_wrap2"); //Fields wrapper
+		var add_button2      = $(".add_field_button2"); //Add button ID		
 
-			$('.select').select2({
-				width: '100%'
-			});
-	$('#simpan-com').click(function(e){
-		e.preventDefault();
-			var deskripsi	= $('#deskripsi').val();
-			var image	= $('#image').val();
-			var idtype	= $('#inventory_1').val();
-			var ppn	    = $('#ppn').val();	
-			
-			var data, xhr;
-
-			if(ppn =='' || ppn=='0'){
-					swal("Warning", "PPN Tidak Boleh Kosong :)", "error");
-					return false;
-			}else{
-
-			swal({
-				  title: "Are you sure?",
-				  text: "You will not be able to process again this data!",
-				  type: "warning",
-				  showCancelButton: true,
-				  confirmButtonClass: "btn-danger",
-				  confirmButtonText: "Yes, Process it!",
-				  cancelButtonText: "No, cancel process!",
-				  closeOnConfirm: true,
-				  closeOnCancel: false
-				},
-				function(isConfirm) {
-				  if (isConfirm) {
-						var formData 	=new FormData($('#data-form')[0]);
-						var baseurl=siteurl+'penawaran/SaveRevisiPenawaran';
-						$.ajax({
-							url			: baseurl,
-							type		: "POST",
-							data		: formData,
-							cache		: false,
-							dataType	: 'json',
-							processData	: false, 
-							contentType	: false,				
-							success		: function(data){								
-								if(data.status == 1){											
-									swal({
-										  title	: "Save Success!",
-										  text	: data.pesan,
-										  type	: "success",
-										  timer	: 7000,
-										  showCancelButton	: false,
-										  showConfirmButton	: false,
-										  allowOutsideClick	: false
-										});
-									window.location.href = base_url + active_controller;
-								}else{
-									
-									if(data.status == 2){
-										swal({
-										  title	: "Save Failed!",
-										  text	: data.pesan,
-										  type	: "warning",
-										  timer	: 7000,
-										  showCancelButton	: false,
-										  showConfirmButton	: false,
-										  allowOutsideClick	: false
-										});
-									}else{
-										swal({
-										  title	: "Save Failed!",
-										  text	: data.pesan,
-										  type	: "warning",
-										  timer	: 7000,
-										  showCancelButton	: false,
-										  showConfirmButton	: false,
-										  allowOutsideClick	: false
-										});
-									}
-									
-								}
-							},
-							error: function() {
-								
-								swal({
-								  title				: "Error Message !",
-								  text				: 'An Error Occured During Process. Please try again..',						
-								  type				: "warning",								  
-								  timer				: 7000,
-								  showCancelButton	: false,
-								  showConfirmButton	: false,
-								  allowOutsideClick	: false
-								});
-							}
-						});
-				  } else {
-					swal("Cancelled", "Data can be process again :)", "error");
-					return false;
-				  }
-			});
-
-		 }
+		$('.select').select2({
+			width: '100%'
 		});
 
-	
-		
-});
-function get_customer(){
-        var id_customer=$("#id_customer").val();
-		 $.ajax({
-            type:"GET",
-            url:siteurl+'penawaran/getemail',
-            data:"id_customer="+id_customer,
-            success:function(html){
-               $("#email_slot").html(html);
-            }
-        });
-		$.ajax({
-            type:"GET",
-            url:siteurl+'penawaran/getpic',
-            data:"id_customer="+id_customer,
-            success:function(html){
-               $("#pic_slot").html(html);
-            }
-        });
-		$.ajax({
-            type:"GET",
-            url:siteurl+'penawaran/getsales',
-            data:"id_customer="+id_customer,
-            success:function(html){
-               $("#sales_slot").html(html);
-            }
-        });
-    }
-function DelItem(id){
-		$('#data_barang #tr_'+id).remove();
-		
-	}
-	
-	
-     $('#tbh_ata').on( 'click', function () {
-		
-	 var jumlah	=$('#list_spk').find('tr').length;
-	 
-	 var nomor   = jumlah;
-	 
-	 var klik = parseInt(nomor)+parseInt(10);
-	 
-	 
-	 $.ajax({
-		 type:"GET",
-		 url:siteurl+'penawaran/GetProduk',
-		 data:"jumlah="+klik,
-		 success:function(html){
-			$("#list_spk").append(html);
-			$('.select').select2({
-				width:'100%'
+		$('#simpan-com').click(function(e){
+			e.preventDefault();
+				var deskripsi	= $('#deskripsi').val();
+				var image	= $('#image').val();
+				var idtype	= $('#inventory_1').val();
+				var ppn	    = $('#ppn').val();	
+				
+				var data, xhr;
+
+				if(ppn =='' || ppn=='0'){
+						swal("Warning", "PPN Tidak Boleh Kosong :)", "error");
+						return false;
+				}else{
+				swal({
+					title: "Are you sure?",
+					text: "You will not be able to process again this data!",
+					type: "warning",
+					showCancelButton: true,
+					confirmButtonClass: "btn-danger",
+					confirmButtonText: "Yes, Process it!",
+					cancelButtonText: "No, cancel process!",
+					closeOnConfirm: true,
+					closeOnCancel: false
+					},
+					function(isConfirm) {
+					if (isConfirm) {
+							var formData 	=new FormData($('#data-form')[0]);
+							var baseurl=siteurl+'penawaran/SaveEditPenawaran';
+							$.ajax({
+								url			: baseurl,
+								type		: "POST",
+								data		: formData,
+								cache		: false,
+								dataType	: 'json',
+								processData	: false, 
+								contentType	: false,				
+								success		: function(data){								
+									if(data.status == 1){											
+										swal({
+											title	: "Save Success!",
+											text	: data.pesan,
+											type	: "success",
+											timer	: 7000,
+											showCancelButton	: false,
+											showConfirmButton	: false,
+											allowOutsideClick	: false
+											});
+										window.location.href = base_url + active_controller;
+									}else{
+										
+										if(data.status == 2){
+											swal({
+											title	: "Save Failed!",
+											text	: data.pesan,
+											type	: "warning",
+											timer	: 7000,
+											showCancelButton	: false,
+											showConfirmButton	: false,
+											allowOutsideClick	: false
+											});
+										}else{
+											swal({
+											title	: "Save Failed!",
+											text	: data.pesan,
+											type	: "warning",
+											timer	: 7000,
+											showCancelButton	: false,
+											showConfirmButton	: false,
+											allowOutsideClick	: false
+											});
+										}
+										
+									}
+								},
+								error: function() {
+									
+									swal({
+									title				: "Error Message !",
+									text				: 'An Error Occured During Process. Please try again..',						
+									type				: "warning",								  
+									timer				: 7000,
+									showCancelButton	: false,
+									showConfirmButton	: false,
+									allowOutsideClick	: false
+									});
+								}
+							});
+					} else {
+						swal("Cancelled", "Data can be process again :)", "error");
+						return false;
+					}
+				});
+
+			}
+			});	
+		});
+
+		function get_customer(){
+			var id_customer=$("#id_customer").val();
+				$.ajax({
+				type:"GET",
+				url:siteurl+'penawaran/getemail',
+				data:"id_customer="+id_customer,
+				success:function(html){
+					$("#email_slot").html(html);
+				}
 			});
-			
-			
-		   
-		   
-			
-		 }
-	 });
-	 
-	  $(this).data('klik',klik);
-	  
-	  // alert(klik);
-	  });
+			$.ajax({
+				type:"GET",
+				url:siteurl+'penawaran/getpic',
+				data:"id_customer="+id_customer,
+				success:function(html){
+					$("#pic_slot").html(html);
+				}
+			});
+			$.ajax({
+				type:"GET",
+				url:siteurl+'penawaran/getsales',
+				data:"id_customer="+id_customer,
+				success:function(html){
+					$("#sales_slot").html(html);
+				}
+			});
+		}
 
-    function HapusItem(id){
-		$('#list_spk #tr_'+id).remove();
-		totalBalanced();
+		function DelItem(id){
+			$('#data_barang #tr_'+id).remove();
+		}
+	
+	
+    $('#tbh_ata').on( 'click', function () {
+		
+		var jumlah	=$('#list_spk').find('tr').length;
+		
+		var nomor   = jumlah;
+		
+		var klik = parseInt(nomor)+parseInt(10);
+	 
+	 
+		$.ajax({
+			type:"GET",
+			url:siteurl+'penawaran/GetProduk',
+			data:"jumlah="+klik,
+			success:function(html){
+				$("#list_spk").append(html);
+				$('.select').select2({
+					width:'100%'
+				});
+			}
+		});
+	 
+	  	$(this).data('klik',klik);
+	// alert(klik);
+	});
+
+    function HapusItem(id){		
+		
+		$('#list_spk #tr_'+id).remove();	
+
+        totalBalanced();		
 	}
 
-	function CariDetail(id){
-		
+	function CariDetail(id) {
         var id_material=$('#used_no_surat_'+id).val();
 		var id_top  =$('#top').val();
 
@@ -444,14 +440,9 @@ function DelItem(id){
             url:siteurl+'penawaran/CariNamaProduk',
             data:"id_category3="+id_material+"&id="+id,
             success:function(data){
-				if (data.code == 200) {
-					//console.log(data);
-					//exit();
-					$('#nama_produk_'+id).html(data.nama_produk);
-					$('#spesifikasi_'+id).html(data.spesifikasi);
-					$('#qty_actual_'+id).html(data.qty_actual);
-					$('#used_qty_'+id).val('');
-				}		
+               $('#nama_produk_'+id).html(data.nama_produk);
+			   $('#spesifikasi_'+id).html(data.spesifikasi);
+			   $('#used_qty_'+id).val('');
             }
         });
 
@@ -475,128 +466,40 @@ function DelItem(id){
 			  
             }
         });
-		
-		$.ajax({
-            type:"GET",
-            url:siteurl+'penawaran/CariDiskonCompare',
-            data:"id_category3="+id_material+"&id="+id+"&top="+id_top,
-            success:function(html){
-               $('#compare_diskon_'+id).html(html);
-
-			   $('#used_qty_'+id).val('');
-
-			   
-            }
-        });
-
-		$.ajax({
-            type:"GET",
-            url:siteurl+'penawaran/CariStokFree',
-            data:"id_category3="+id_material+"&id="+id+"&top="+id_top,
-            success:function(html){
-               $('#stok_tersedia_'+id).html(html);
-			   $('#used_qty_'+id).val('');
-            }
-        });
 	}
 
-	function Freight(id)
-		{
-			var freight=$('#used_freight_cost_'+id).val();
-			$('#used_freight_cost_'+id).val(number_format(freight,2));	
-
-			HitungTotal(id);
-
-		}
-
-		function HitungTotal(id){
-	    var qty = $('#used_qty_'+id).val();
-		var qty_stok = $('#used_stok_tersedia_'+id).val();
-		var harga = $('#used_harga_satuan_'+id).val().split(",").join("");
-		var diskon = $('#used_diskon_'+id).val();
-		var status = $('#order_sts').val(); 
-
-		// var valDiscon = getNum(diskon)
-		// var valDisconcompare = getNum(diskonCompare)
-
-		// var valqty      = getNum(qty)
-		// var valqty_stok = getNum(qty_stok)
+	function HitungTotal(id){
+		
+		var qty=$('#used_qty_'+id).val();
+		var harga=$('#used_harga_satuan_'+id).val().split(",").join("");
+		var diskon=$('#used_diskon_'+id).val();
 		
 		var totalBerat = getNum(qty) * getNum(harga);
 		var nilai_diskon = (getNum(diskon) * getNum(totalBerat))/100;
 		var total_harga =  getNum(totalBerat) - getNum(nilai_diskon);
 
+		
 		$('#used_total_harga_'+id).val(number_format(total_harga,2));	
 		$('#used_nilai_diskon_'+id).val(number_format(nilai_diskon,2));	
 			
 		// HitungLoss(id);
+
 		totalBalanced();
 	}
-
-		function HitungTotal_old(id){
-	    var qty=$('#used_qty_'+id).val();
-		var harga=$('#used_harga_satuan_'+id).val().split(",").join("");
-		var diskon=$('#used_diskon_'+id).val();
-		var diskonCompare=$('#used_compare_diskon_'+id).val();
-		var freight=$('#used_freight_cost_'+id).val().split(",").join("");
 		
-		
-		if (diskon > diskonCompare) {
-				swal({
-					title: "Warning!",
-					text: "Diskon Melebihi Ketentuan!",
-					type: "warning",
-					timer: 3000
-				});
-				$('#used_diskon_'+id).val(diskonCompare);
-				return false;
-		}else 
-		{
-		
-		var totalBerat = getNum(qty) * getNum(harga);
-		var nilai_diskon = (getNum(diskon) * getNum(totalBerat))/100;
-		var total_harga =  getNum(totalBerat) - getNum(nilai_diskon)+getNum(freight);
-
-		
-		$('#used_total_harga_'+id).val(number_format(total_harga,2));	
-		$('#used_nilai_diskon_'+id).val(number_format(nilai_diskon,2));	
-			
-
-
-		//HitungLoss(id);
-
-		totalBalanced();
-		
-		
-		}
-
-		
-			
-		}
-
-
-		
-		
-
-		function totalBalanced(){
-		
+	function totalBalanced() {
 		var SUMx = 0;
 		$(".total" ).each(function() {
 			SUMx += Number($(this).val().split(",").join(""));
 		});
 		
-		
 		$('.totalproduk').val(number_format(SUMx,2));
-
 		$('#grandtotal').val(number_format(SUMx,2));	
 
-		hitungPpn();
+		hitungPpn();	
+	}
 
-		
-		}
-
-
-		function hitungPpn(){
+	function hitungPpn() {
 		var total =$('.totalproduk').val().split(",").join("");
 		var ppn   =$('#ppn').val();	
 	
@@ -605,16 +508,12 @@ function DelItem(id){
 
 		
 		$('#totalppn').val(number_format(nilai_ppn,2));		
-		$('#grandtotal').val(number_format(grand_total,2));		
+		$('#grandtotal').val(number_format(grand_total,2));
+	}
 
-		
-		}
-
-
-		function HitungLoss(id){
+	function HitungLoss(id) {
 	    var qty=$('#used_qty_'+id).val();
 		var stok=$('#used_stok_tersedia_'+id).val();
-		
 		
 		var totalstok      = getNum(qty) + getNum(stok);
 		var totalselisih   = getNum(stok) - getNum(qty);
@@ -624,10 +523,7 @@ function DelItem(id){
 		if (totalselisih >= 0)
 		{
 			var loss = 0;
-
-		}
-		else
-		{
+		} else {
 			var loss = loss_nilai;
 		}
 
@@ -635,23 +531,20 @@ function DelItem(id){
 		if(order_sts=='ind')
 		{
 			$('#used_potensial_loss_'+id).val('0');		
-		}else{
+		} else {
 			$('#used_potensial_loss_'+id).val(number_format(loss,2));		
-		}		
-					
-		}
-
-		
+		}					
+	}
 			
-		function getNum(val) 
-		{
-        if (isNaN(val) || val == '') {
-            return 0;
-        }
-        return parseFloat(val);
-    	}
+	function getNum(val) 
+	{
+		if (isNaN(val) || val == '') {
+			return 0;
+		}
+		return parseFloat(val);
+	}
 
-		function number_format (number, decimals, dec_point, thousands_sep) {
+	function number_format (number, decimals, dec_point, thousands_sep) {
 		// Strip all characters but numerical ones.
 		number = (number + '').replace(/[^0-9+\-Ee.]/g, '');
 		var n = !isFinite(+number) ? 0 : +number,
@@ -673,7 +566,5 @@ function DelItem(id){
 			s[1] += new Array(prec - s[1].length + 1).join('0');
 		}
 		return s.join(dec);
-		}
-
-
+	}
 </script>
