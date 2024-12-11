@@ -198,6 +198,54 @@ thead input {
 		var deskripsi = $('#desc').val();
 		var status = $("#status").val();
 		var idWarehouse = $("#id_warehouse").val();
+		
+		if(warehouseName == '' || warehouseName == null){
+			// $("#error").html("Nama asset masih kosong !!!");
+			// $('#myModal').modal("show");
+			swal({
+				title	: "Error Message!",
+				text	: 'Nama Warehouse Name masih kosong ...',
+				type	: "warning"
+			});
+			//$('#simpan-bro').prop('disabled',false);
+			return false;
+		}
+
+		if(kodeGudang == '' || kodeGudang == null){
+			// $("#error").html("Nama asset masih kosong !!!");
+			// $('#myModal').modal("show");
+			swal({
+				title	: "Error Message!",
+				text	: 'Nama Kode Gudang masih kosong ...',
+				type	: "warning"
+			});
+			//$('#simpan-bro').prop('disabled',false);
+			return false;
+		}
+
+		if(deskripsi == '' || deskripsi == null){
+			// $("#error").html("Nama asset masih kosong !!!");
+			// $('#myModal').modal("show");
+			swal({
+				title	: "Error Message!",
+				text	: 'Nama Deskripsi masih kosong ...',
+				type	: "warning"
+			});
+			//$('#simpan-bro').prop('disabled',false);
+			return false;
+		}
+
+		if(status == '' || status == null){
+			// $("#error").html("Nama asset masih kosong !!!");
+			// $('#myModal').modal("show");
+			swal({
+				title	: "Error Message!",
+				text	: 'Nama Status masih kosong ...',
+				type	: "warning"
+			});
+			//$('#simpan-bro').prop('disabled',false);
+			return false;
+		}
 
 		$.ajax({
 			url: '<?php echo base_url('master_warehouse/saveFormWarehouse') ?>',

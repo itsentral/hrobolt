@@ -8,3 +8,17 @@ ERROR - 2024-12-11 10:34:48 --> Severity: Error --> Cannot use object of type st
 ERROR - 2024-12-11 10:55:50 --> 404 Page Not Found: ../modules/master_warehouse/controllers/Master_warehouse/updateWarehouse
 ERROR - 2024-12-11 10:56:01 --> 404 Page Not Found: ../modules/master_warehouse/controllers/Master_warehouse/updateWarehouse
 ERROR - 2024-12-11 10:57:50 --> 404 Page Not Found: ../modules/master_warehouse/controllers/Master_warehouse/updateWarehouse
+ERROR - 2024-12-11 15:15:01 --> Query error: The user specified as a definer ('root'@'%') does not exist - Invalid query: SELECT
+				SUM(a.nilai_asset) AS total_aset,
+				SUM(a.`value`) AS total_susut,
+				SUM(b.sisa_nilai) AS total_sisa
+			FROM
+				asset a LEFT JOIN asset_nilai b ON a.kd_asset = b.kd_asset
+			WHERE 1=1
+				AND a.deleted = 'N'
+				
+				
+				AND (
+				a.nm_asset LIKE '%%'
+				OR a.category LIKE '%%'
+	        )
