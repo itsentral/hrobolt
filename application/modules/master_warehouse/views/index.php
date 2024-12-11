@@ -2,7 +2,7 @@
     $ENABLE_ADD     = has_permission('Variasi.Add');
     $ENABLE_MANAGE  = has_permission('Variasi.Manage');
     $ENABLE_VIEW    = has_permission('Variasi.View');
-    $ENABLE_DELETE  = has_permission('Warehouse.Delete');
+    $ENABLE_DELETE  = has_permission('Variasi.Delete');
 	
 ?>
 <style type="text/css">
