@@ -186,7 +186,7 @@ thead input {
 			  dataType : "json",
 			  data:{'id':id},
 			  success:function(result){
-				  if(result.status == '1'){
+				  if(result.status == 1){
 					 swal({
 						  title: "Sukses",
 						  text : "Data Inventory berhasil dihapus.",

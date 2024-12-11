@@ -23,3 +23,5 @@ ERROR - 2024-12-11 15:15:01 --> Query error: The user specified as a definer ('r
 				OR a.category LIKE '%%'
 	        )
 ERROR - 2024-12-11 16:47:18 --> Query error: BIGINT UNSIGNED value is out of range in '(cast(`hirobolt`.`app_parameter`.`value` as unsigned) - 1)' - Invalid query: UPDATE app_parameter SET VALUE=RIGHT(CONCAT('0',CAST(VALUE AS UNSIGNED)-1),1) WHERE CODE='JP'
+ERROR - 2024-12-11 16:50:57 --> Query error: BIGINT UNSIGNED value is out of range in '(cast(`hirobolt`.`app_parameter`.`value` as unsigned) - 1)' - Invalid query: UPDATE app_parameter SET VALUE=RIGHT(CONCAT('0',CAST(VALUE AS UNSIGNED)-1),1) WHERE CODE='JP'
+ERROR - 2024-12-11 16:54:40 --> Query error: BIGINT UNSIGNED value is out of range in '(cast(`hirobolt`.`app_parameter`.`value` as unsigned) - 1)' - Invalid query: UPDATE app_parameter SET VALUE=RIGHT(CONCAT('0',CAST(VALUE AS UNSIGNED)-1),1) WHERE CODE='JP'
