@@ -182,7 +182,7 @@ thead input {
 		function(){
 		  $.ajax({
 			  type:'POST',
-			  url:siteurl+'inventory_1/deleteInventory',
+			  url:siteurl + active_controller + '/deleteInventory',
 			  dataType : "json",
 			  data:{'id':id},
 			  success:function(result){
