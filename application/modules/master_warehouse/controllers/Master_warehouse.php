@@ -219,7 +219,7 @@ class Master_warehouse extends Admin_Controller
 	
 	public function delete()
 	{
-		//$this->auth->restrict($this->deletePermission);
+		$this->auth->restrict($this->deletePermission);
 		$id = $this->input->post('id');
 		
 		$this->db->trans_begin();

@@ -334,6 +334,7 @@ thead input {
 		e.preventDefault()
 		var id = $(this).data('id');
 		var name = $(this).data('name');
+		var csrfHash = '<?php echo $this->security->get_csrf_hash(); ?>';
 		swal({
 			title: "Anda Yakin Mengahapus Data ?",
 			text: "Data ini, " + name.toUpperCase() + " akan dihapus",
@@ -348,7 +349,9 @@ thead input {
 				type:'POST',
 				url:siteurl+'Master_warehouse/delete',
 				dataType : "json",
-				data:{'id':id},
+				data:{'id':id,
+					'csrfName': csrfHash
+				},
 				success:function(result){
 					if(result.status == 1){
 						swal({
