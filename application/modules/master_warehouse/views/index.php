@@ -64,7 +64,7 @@ thead input {
 										<td><?php echo $warehouse->desc ?></td>
 										<td><?php echo $warehouse->status ?></td>
 										<td>
-											<a class="btn btn-info btn-warehouse-edit" data-id="<?php echo $warehouse->id ?>"><span class="fa fa-pencil"></span></a> |
+											<a class="btn btn-info edit" data-id="<?php echo $warehouse->id ?>"><span class="fa fa-pencil"></span></a> |
 											<a class="btn btn-danger delete" data-name="<?php echo $warehouse->name ?>" data-id="<?php echo $warehouse->id ?>"><span class="fa fa-trash"></span></a> 
 										</td>
 									</tr>
@@ -94,7 +94,7 @@ thead input {
 					<div class="col-md-12">
 						<div class="form-group">
 							<label>Nama Warehouse</label>
-							<input type="text" name="warehouse_name" id="warehouse_name" class="form-control">
+							<input type="text" name="warehouse_name" id="warehouse_name" class="form-control" required>
 						</div>
 					</div>
 				</div>
@@ -102,7 +102,7 @@ thead input {
 					<div class="col-md-12">
 						<div class="form-group">
 							<label>Kode Gudang</label>
-							<select name="kode_gudang" id="kode_gudang" class="form-control">
+							<select name="kode_gudang" id="kode_gudang" class="form-control" required>
 								<option value="">Silahkan Pilih</option>
 								<option value="PUSAT">PUSAT</option>
 								<option value="SUBGUDANG">SUB GUDANG</option>
@@ -118,7 +118,7 @@ thead input {
 					<div class="col-md-12">
 						<div class="form-group">
 							<label>Deskripsi</label>
-							<select name="desc" id="desc" class="form-control">
+							<select name="desc" id="desc" class="form-control" required>
 								<option value="">Silahkan Pilih</option>
 								<option value="Pusat">Gudang Pusat</option>
 								<option value="Sub Gudang">Sub Gudang Lokal</option>
@@ -132,7 +132,7 @@ thead input {
 					<div class="col-md-12">
 						<div class="form-group">
 							<label>Status</label>
-							<select name="status" id="status" class="form-control">
+							<select name="status" id="status" class="form-control" required>
 								<option value="">Silahkan Pilih</option>
 								<option value="Aktif">Aktif</option>
 								<option value="Not Aktif">Not Aktif</option>
@@ -153,6 +153,19 @@ thead input {
 	</div>
 </div>
 
+<div class="modal modal-default fade" id="dialog-popup" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	<div class="modal-dialog modal-lg">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+				<h4 class="modal-title" id="head_title">Default</h4>
+			</div>
+			<div class="modal-body" id="ModalView">
+				...
+			</div>
+		</div>
+	</div>
+
 <!-- DataTables -->
 <script src="<?= base_url('assets/plugins/datatables/jquery.dataTables.min.js')?>"></script>
 <script src="<?= base_url('assets/plugins/datatables/dataTables.bootstrap.min.js')?>"></script>
@@ -163,6 +176,21 @@ thead input {
 	$(".form-warehouse").click(function() {
 		$("#modal-warehouse").modal('show');
 	});
+
+	$(document).on('click', '.edit', function(e) {
+			var id = $(this).data('id');
+			$("#head_title").html("<b>Form Edit Warehouse</b>");
+			$.ajax({
+				type: 'POST',
+				//url: siteurl + active_controller + '/formWarehouse/' + id,//version old
+				url: siteurl + active_controller + '/edit/' + id,//version new
+				success: function(data) {
+					$("#dialog-popup").modal();
+					$("#ModalView").html(data);
+
+				}
+			})
+		});
 
 	function saveWarehouse() {
 		var warehouseName = $('#warehouse_name').val();
@@ -200,6 +228,59 @@ thead input {
 		});
 	}
 	
+	//bagian edit data warehouse
+	$(document).on('submit', '#data_form', function(e) {
+			e.preventDefault()
+			var data = $('#data_form').serialize();
+			// alert(data);
+
+			swal({
+					title: "Anda Yakin?",
+					text: "Data akan diproses!",
+					type: "warning",
+					showCancelButton: true,
+					confirmButtonClass: "btn-info",
+					confirmButtonText: "Yes",
+					cancelButtonText: "No",
+					closeOnConfirm: false
+				},
+				function() {
+					$.ajax({
+						type: 'POST',
+						url: siteurl + active_controller + 'edit',
+						dataType: "json",
+						data: data,
+						success: function(data) {
+							if (data.status == '1') {
+								swal({
+										title: "Sukses",
+										text: data.pesan,
+										type: "success"
+									},
+									function() {
+										window.location.reload(true);
+									})
+							} else {
+								swal({
+									title: "Error",
+									text: data.pesan,
+									type: "error"
+								})
+
+							}
+						},
+						error: function() {
+							swal({
+								title: "Error",
+								text: "Error proccess !",
+								type: "error"
+							})
+						}
+					})
+				});
+
+		})
+
 	// DELETE DATA
 	$(document).on('click', '.delete', function(e){
 		e.preventDefault()

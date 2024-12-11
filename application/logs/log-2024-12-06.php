@@ -125,3 +125,16 @@ ERROR - 2024-12-06 16:32:29 --> Query error: The user specified as a definer ('r
 ERROR - 2024-12-06 16:36:43 --> Query error: The user specified as a definer ('root'@'%') does not exist - Invalid query: SELECT a.*, b.qty_actual AS qty_actual FROM ms_inventory_category3 a JOIN view_stok_actual b ON b.sku_varian = a.sku_varian WHERE a.id = '1600' 
 ERROR - 2024-12-06 16:40:11 --> Query error: The user specified as a definer ('root'@'%') does not exist - Invalid query: SELECT a.*, b.qty_actual AS qty_actual FROM ms_inventory_category3 a JOIN view_stok_actual b ON b.sku_varian = a.sku_varian WHERE a.id = '1600' 
 ERROR - 2024-12-06 16:44:35 --> Query error: The user specified as a definer ('root'@'%') does not exist - Invalid query: SELECT a.*, b.qty_actual AS qty_actual FROM ms_inventory_category3 a JOIN view_stok_actual b ON b.sku_varian = a.sku_varian WHERE a.id = '1597' 
+ERROR - 2024-12-06 16:55:06 --> Query error: The user specified as a definer ('root'@'%') does not exist - Invalid query: SELECT a.*, b.qty_actual AS qty_actual FROM ms_inventory_category3 a JOIN view_stok_actual b ON b.sku_varian = a.sku_varian WHERE a.id = '1599' 
+ERROR - 2024-12-06 16:59:48 --> Query error: The user specified as a definer ('root'@'%') does not exist - Invalid query: SELECT a.*, b.qty_actual AS qty_actual FROM ms_inventory_category3 a JOIN view_stok_actual b ON b.sku_varian = a.sku_varian WHERE a.id = '1571' 
+ERROR - 2024-12-06 13:00:44 --> 404 Page Not Found: /index
+ERROR - 2024-12-06 19:29:55 --> 404 Page Not Found: ../modules/master_warehouse/controllers/Master_warehouse/add
+ERROR - 2024-12-06 19:30:52 --> 404 Page Not Found: ../modules/master_warehouse/controllers/Master_warehouse/add
+ERROR - 2024-12-06 19:30:55 --> 404 Page Not Found: ../modules/master_warehouse/controllers/Master_warehouse/add
+ERROR - 2024-12-06 19:30:57 --> 404 Page Not Found: ../modules/master_warehouse/controllers/Master_warehouse/add
+ERROR - 2024-12-06 19:30:58 --> 404 Page Not Found: ../modules/master_warehouse/controllers/Master_warehouse/add
+ERROR - 2024-12-06 19:37:22 --> Query error: You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '' at line 1 - Invalid query: SELECT * FROM warehouse WHERE id = 
+ERROR - 2024-12-06 19:37:24 --> Query error: You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '' at line 1 - Invalid query: SELECT * FROM warehouse WHERE id = 
+ERROR - 2024-12-06 19:37:31 --> Query error: You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '' at line 1 - Invalid query: SELECT * FROM warehouse WHERE id = 
+ERROR - 2024-12-06 19:38:16 --> Query error: You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '' at line 1 - Invalid query: SELECT * FROM warehouse WHERE id = 
+ERROR - 2024-12-06 13:46:30 --> Severity: Parsing Error --> syntax error, unexpected ';' C:\xampp_5_6\htdocs\hrobolt\application\modules\master_warehouse\controllers\Master_warehouse.php 59
