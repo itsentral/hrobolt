@@ -1,7 +1,4 @@
 <?php
-header('Access-Control-Allow-Origin: *');
-header('Access-Control-Allow-Methods: GET, POST, OPTIONS');
-header('Access-Control-Allow-Headers: Content-Type, Authorization');
     $ENABLE_ADD     = has_permission('Variasi.Add');
     $ENABLE_MANAGE  = has_permission('Variasi.Manage');
     $ENABLE_VIEW    = has_permission('Variasi.View');
@@ -350,7 +347,8 @@ thead input {
 		}, function(){
 			$.ajax({
 				type:'POST',
-				url:siteurl+'Master_warehouse/delete',
+				// url:siteurl+'Master_warehouse/delete',
+				url: siteurl + active_controller + '/delete',
 				dataType : "json",
 				data:{'id':id
 					//'csrfName': csrfHash
