@@ -1,4 +1,7 @@
 <?php
+header('Access-Control-Allow-Origin: *');
+header('Access-Control-Allow-Methods: GET, POST, OPTIONS');
+header('Access-Control-Allow-Headers: Content-Type, Authorization');
     $ENABLE_ADD     = has_permission('Variasi.Add');
     $ENABLE_MANAGE  = has_permission('Variasi.Manage');
     $ENABLE_VIEW    = has_permission('Variasi.View');
@@ -334,7 +337,7 @@ thead input {
 		e.preventDefault()
 		var id = $(this).data('id');
 		var name = $(this).data('name');
-		var csrfHash = '<?php echo $this->security->get_csrf_hash(); ?>';
+		//var csrfHash = '<?php echo $this->security->get_csrf_hash(); ?>';
 		swal({
 			title: "Anda Yakin Mengahapus Data ?",
 			text: "Data ini, " + name.toUpperCase() + " akan dihapus",
@@ -349,8 +352,8 @@ thead input {
 				type:'POST',
 				url:siteurl+'Master_warehouse/delete',
 				dataType : "json",
-				data:{'id':id,
-					'csrfName': csrfHash
+				data:{'id':id
+					//'csrfName': csrfHash
 				},
 				success:function(result){
 					if(result.status == 1){
