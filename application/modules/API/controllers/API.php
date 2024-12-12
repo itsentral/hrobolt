@@ -68,6 +68,24 @@ class API extends Base_Controller
     	}
     }
 
+    public function logins(){
+        // print_r($this->auth->is_login());die();
+        if($this->auth->is_login() == true)
+        {
+            $data_session	= $this->session->userdata;
+            $app_session = $this->session->userdata('app_session');
+            $username = $this->session->userdata['app_session']['username'];
+            $ip_address = ($this->ci->input->ip_address()) == "::1" ? "127.0.0.1" : $this->ci->input->ip_address();
+            $this->ci->users_model->update($this->user_id(), array('login_terakhir' => date('Y-m-d H:i:s'), 'ip' => $ip_address));
+            // print_r($username);die();
+            redirect('/');
+			// redirect('https://sentral.dutastudy.com/metalsindo_dev/');
+        }
+        // else{
+        //     print_r('Gagal Login');
+        // }
+    }
+
     protected function logout()
     {
         $this->ci->session->sess_destroy();
@@ -85,7 +103,8 @@ class API extends Base_Controller
 
     public function authShop()
     {
-        $this->login();
+        // $this->login();//version old
+        $this->logins();//version new
 
         $path = "/api/v2/shop/auth_partner";
         $redirectURL = "https://sentral.dutastudy.com/";
@@ -104,7 +123,7 @@ class API extends Base_Controller
         $path = '/api/v2/auth/token/get';
 
         $timestamp = time();
-        
+        // print_r($timestamp);die();
         $body = [
             "code" => $this->shopCode,
             "shop_id" => $this->shopId,
@@ -114,20 +133,33 @@ class API extends Base_Controller
         $sign = $this->makeSign($path);
         $url = sprintf("%s%s?timestamp=%s&partner_id=%s&sign=%s", $this->url, $path, $timestamp, $this->partnerId, $sign);
 
-        // echo $url;
+        //echo $sign;echo "<br>";
+        //echo $url;echo "<br>";
+        // die();
 
         $c = curl_init($url);
         curl_setopt($c, CURLOPT_POST, 1);
         curl_setopt($c, CURLOPT_POSTFIELDS, json_encode($body));
         curl_setopt($c, CURLOPT_HTTPHEADER, array('Content-Type: application/json'));
         curl_setopt($c, CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt($c, CURLOPT_CAINFO, "C:/xampp_5_6/php/extras/ssl/cacert.pem");
         $resp = curl_exec($c);
 
         $ret = json_decode($resp, true);
+        //print_r($ret);
+        $response = curl_exec($c);
+        //print_r($response);
+        // if ($response === false) {
+        //     echo 'Kesalahan: ' . curl_error($c);
+        // } else {
+        //     echo 'done';
+        //     // Olah data yang diterima dari API
+        // }
+        //die();
         $accessToken = $ret["access_token"];
         $newRefreshToken = $ret["refresh_token"];
-        // echo "\naccess_token: $accessToken, refresh_token: $newRefreshToken raw: $ret"."\n";
-
+        //echo "\naccess_token: $accessToken, refresh_token: $newRefreshToken raw: $ret"."\n";
+        //die();
         if (isset($accessToken)) {
             $dataAccessToken = [
                 'value' => $accessToken,
@@ -439,6 +471,10 @@ class API extends Base_Controller
                             $time, $accessToken->value, $this->partnerId, $this->shopId, $sign);
         $url = $this->url . $path . $parameter;
 
+        // echo $sign;echo "<br>";
+        //echo $url;echo "<br>";
+        //die();
+        
         $curl = curl_init();
 
         curl_setopt_array($curl, array(
@@ -489,6 +525,55 @@ class API extends Base_Controller
 
         return redirect('/Shopee_API', 'refresh');
     }
+
+    //start functon hanya tes data api
+    public function shop_info()
+    {
+        $this->getAccessTokenShopLevel();
+
+        $accessToken = $this->db->query("SELECT * FROM app_parameter WHERE code = 'SAT'")->row();
+        $path = '/api/v2/shop/get_shop_info';
+        $time = time();
+
+        $baseString = sprintf("%s%s%s%s%s", $this->partnerId, $path, $time, $accessToken->value, $this->shopId);
+        $sign = hash_hmac('sha256', $baseString, $this->partnerKey);
+        $parameter = sprintf("?timestamp=%s&access_token=%s&item_status=NORMAL&offset=0&page_size=30&partner_id=%s&shop_id=%s&sign=%s", 
+                            $time, $accessToken->value, $this->partnerId, $this->shopId, $sign);
+        $url = $this->url . $path . $parameter;
+
+        // echo $sign;echo "<br>";
+        //echo $url;echo "<br>";
+        //die();
+
+        $curl = curl_init();
+
+        curl_setopt_array($curl, array(
+            CURLOPT_URL => $url,
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_ENCODING => '',
+            CURLOPT_MAXREDIRS => 10,
+            CURLOPT_TIMEOUT => 0,
+            CURLOPT_FOLLOWLOCATION => true,
+            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+            CURLOPT_CUSTOMREQUEST => 'GET',
+            CURLOPT_HTTPHEADER => array(
+                'Content-Type: application/json'
+            ),
+        ));
+
+        $response = curl_exec($curl);
+        $response = json_decode($response, true);
+
+        curl_close($curl);
+
+        // foreach ($response['response']['item'] AS $product) {
+
+        // }
+
+        print_r($response);
+        die();
+    }
+    //end function hanya tes data api
 
     public function getDataProductDetail(array $itemId)
     {
