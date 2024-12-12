@@ -571,6 +571,24 @@ class API extends Base_Controller
         print_r($response);
         die();
     }
+
+    public function getDataCategory(){
+        $this->getAccessTokenShopLevel();
+
+        $accessToken = $this->db->query("SELECT * FROM app_parameter WHERE code = 'SAT'")->row();
+        $path = '/api/v2/product/get_category';
+        $time = time();
+
+        $baseString = sprintf("%s%s%s%s%s", $this->partnerId, $path, $time, $accessToken->value, $this->shopId);
+        $sign = hash_hmac('sha256', $baseString, $this->partnerKey);
+        $parameter = sprintf("?timestamp=%s&access_token=%s&item_status=NORMAL&offset=0&page_size=30&partner_id=%s&shop_id=%s&sign=%s", 
+                            $time, $accessToken->value, $this->partnerId, $this->shopId, $sign);
+        $url = $this->url . $path . $parameter;
+
+        // echo $sign;echo "<br>";
+        echo $url;echo "<br>";
+        die(); 
+    }
     //end function hanya tes data api
 
     public function getDataProductDetail(array $itemId)
