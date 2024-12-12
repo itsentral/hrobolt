@@ -527,7 +527,7 @@ class API extends Base_Controller
     }
 
     //start functon hanya tes data api
-    public function shop_info()
+    public function shop_info()//TESTING DONE
     {
         $this->getAccessTokenShopLevel();
 
@@ -572,7 +572,7 @@ class API extends Base_Controller
         die();
     }
 
-    public function getDataCategory(){
+    public function getDataCategory(){//TESTING DONE
         $this->getAccessTokenShopLevel();
 
         $accessToken = $this->db->query("SELECT * FROM app_parameter WHERE code = 'SAT'")->row();
@@ -615,7 +615,6 @@ class API extends Base_Controller
         // echo $sign;echo "<br>";
         // echo $url;echo "<br>";
         die(); 
-        
     }
     //end function hanya tes data api
 
