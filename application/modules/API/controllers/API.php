@@ -566,11 +566,13 @@ class API extends Base_Controller
 
         curl_close($curl);
 
+        print_r($response['shop_name']);
+
         foreach ($response AS $product) {
             print_r($product->shop_name);
         }
 
-        // print_r($response);
+        print_r($response);
         die();
     }
     //end function hanya tes data api
