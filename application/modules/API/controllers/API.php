@@ -585,9 +585,35 @@ class API extends Base_Controller
                             $time, $accessToken->value, $this->partnerId, $this->shopId, $sign);
         $url = $this->url . $path . $parameter;
 
+        $curl = curl_init();
+
+        curl_setopt_array($curl, array(
+            CURLOPT_URL => $url,
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_ENCODING => '',
+            CURLOPT_MAXREDIRS => 10,
+            CURLOPT_TIMEOUT => 0,
+            CURLOPT_FOLLOWLOCATION => true,
+            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+            CURLOPT_CUSTOMREQUEST => 'GET',
+            CURLOPT_HTTPHEADER => array(
+                'Content-Type: application/json'
+            ),
+        ));
+
+        $response = curl_exec($curl);
+        $response = json_decode($response, true);
+
+        curl_close($curl);
+
+        foreach ($response['response']['category_list'] AS $category) {
+            print_r($category);
+        }        
+
         // echo $sign;echo "<br>";
-        echo $url;echo "<br>";
+        // echo $url;echo "<br>";
         die(); 
+        
     }
     //end function hanya tes data api
 
