@@ -565,13 +565,9 @@ class API extends Base_Controller
         $response = json_decode($response, true);
 
         curl_close($curl);
-
+        //contoh pemanggilan untuk data by one
         print_r($response['shop_name']);
-
-        foreach ($response AS $product) {
-            print_r($product->shop_name);
-        }
-
+        echo "<br>";
         print_r($response);
         die();
     }
