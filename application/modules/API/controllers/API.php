@@ -567,7 +567,7 @@ class API extends Base_Controller
         curl_close($curl);
 
         foreach ($response AS $product) {
-            print_r($product['shop_name']);
+            print_r($product->shop_name);
         }
 
         // print_r($response);
