@@ -607,7 +607,9 @@ class API extends Base_Controller
         curl_close($curl);
 
         foreach ($response['response']['category_list'] AS $category) {
+            echo "<pre>";
             print_r($category);
+            echo "</pre>";
         }        
 
         // echo $sign;echo "<br>";
