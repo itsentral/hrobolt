@@ -500,7 +500,7 @@ class API extends Base_Controller
         }
         // $orderSNImplode = '"' . implode('","', $orderSN) . '"';//version old hide
 
-        $dataOrder = $this->db->query("SELECT * FROM sales_marketplace_header WHERE code_order_marketplace IN($orderSNImplode)")->result();
+        $dataOrder = $this->db->query("SELECT * FROM sales_marketplace_header WHERE code_order_marketplace IN('$orderSNImplode')")->result();
 
         // return $this->output->set_status_header(200)->set_content_type('application/json')->set_output(json_encode($dataOrder));
         
