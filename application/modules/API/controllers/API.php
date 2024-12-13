@@ -517,6 +517,8 @@ class API extends Base_Controller
                         $sku = $product['model_sku'];
 
                         $itemProduct = $this->db->query("SELECT * FROM ms_inventory_category3 WHERE sku_varian = '$sku'")->row();
+                        print_r($itemProduct);
+                        die();
                         // return $this->output->set_status_header(200)->set_content_type('application/json')->set_output(json_encode($itemProduct));
 
                         $dataDetail = [
