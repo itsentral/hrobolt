@@ -345,7 +345,7 @@ class API extends Base_Controller
         return redirect('/Shopee_API', 'refresh');
     }
 
-    public function getOrderListDetail()
+    public function getOrderListDetail_version_old()//from fadli
     {
         $this->getAccessTokenShopLevel();
 
@@ -442,15 +442,15 @@ class API extends Base_Controller
         return redirect('/Shopee_API', 'refresh');
     }
 
-    public function getOrderListDetail_test()
+    public function getOrderListDetail()
     {
         $this->getAccessTokenShopLevel();
 
         $accessToken = $this->db->query("SELECT * FROM app_parameter WHERE code = 'SAT'")->row();
         $path = "/api/v2/order/get_order_detail";
         $time = time();
-        // $orderSN = $this->input->post('code_order'); // dynammic
-        $orderSN = '2412064B7WS5QW';
+        $orderSN = $this->input->post('code_order'); // dynammic
+        // $orderSN = '2412064B7WS5QW';
         if (strpos($orderSN, ',') !== false) {
             // echo "Data mengandung koma.";
             $orderSNImplode = implode(",", $orderSN);
