@@ -511,7 +511,8 @@ class API extends Base_Controller
                     $totalOrder = 0;
 
                     // return $this->output->set_status_header(200)->set_content_type('application/json')->set_output(json_encode($this->getDelivery($order['shipping_carrier'])));
-
+                    print_r($order['item_list']);
+                    die();
                     foreach($order['item_list'] AS $product) {
                         $totalOrder += $product['model_quantity_purchased'];
                         $sku = $product['model_sku'];
