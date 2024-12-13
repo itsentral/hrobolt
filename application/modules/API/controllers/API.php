@@ -449,7 +449,8 @@ class API extends Base_Controller
         $accessToken = $this->db->query("SELECT * FROM app_parameter WHERE code = 'SAT'")->row();
         $path = "/api/v2/order/get_order_detail";
         $time = time();
-        $orderSN = $this->input->post('code_order'); // dynammic
+        // $orderSN = $this->input->post('code_order'); // dynammic
+        $orderSN = '2412064B7WS5QW';
         $orderSNImplode = implode(",", $orderSN);
         // $orderSNComma = str_replace(",", "2%C", implode(",", $orderSN));
         $orderOptional = "buyer_user_id,buyer_username,estimated_shipping_fee,recipient_address,actual_shipping_fee,item_list,pay_time,actual_shipping_fee_confirmed,fulfillment_flag,pickup_done_time,package_list,shipping_carrier,payment_method,total_amount,buyer_username,invoice_data";
