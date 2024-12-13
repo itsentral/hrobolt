@@ -442,6 +442,103 @@ class API extends Base_Controller
         return redirect('/Shopee_API', 'refresh');
     }
 
+    public function getOrderListDetail_test()
+    {
+        $this->getAccessTokenShopLevel();
+
+        $accessToken = $this->db->query("SELECT * FROM app_parameter WHERE code = 'SAT'")->row();
+        $path = "/api/v2/order/get_order_detail";
+        $time = time();
+        $orderSN = $this->input->post('code_order'); // dynammic
+        $orderSNImplode = implode(",", $orderSN);
+        // $orderSNComma = str_replace(",", "2%C", implode(",", $orderSN));
+        $orderOptional = "buyer_user_id,buyer_username,estimated_shipping_fee,recipient_address,actual_shipping_fee,item_list,pay_time,actual_shipping_fee_confirmed,fulfillment_flag,pickup_done_time,package_list,shipping_carrier,payment_method,total_amount,buyer_username,invoice_data";
+
+        $baseString = sprintf("%s%s%s%s%s", $this->partnerId, $path, $time, $accessToken->value, $this->shopId);
+        $sign = hash_hmac('sha256', $baseString, $this->partnerKey);
+        $parameter = sprintf("?timestamp=%s&access_token=%s&order_sn_list=%s&partner_id=%s&response_optional_fields=%s&shop_id=%s&sign=%s", 
+                            $time, $accessToken->value, $orderSNImplode, $this->partnerId, $orderOptional, $this->shopId, $sign);
+        $url = $this->url . $path . $parameter;
+
+        $curl = curl_init();
+
+        curl_setopt_array($curl, array(
+            CURLOPT_URL => $url,
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_ENCODING => '',
+            CURLOPT_MAXREDIRS => 10,
+            CURLOPT_TIMEOUT => 0,
+            CURLOPT_FOLLOWLOCATION => true,
+            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+            CURLOPT_CUSTOMREQUEST => 'GET',
+            CURLOPT_HTTPHEADER => array(
+                'Content-Type: application/json'
+            ),
+        ));
+
+        $response = curl_exec($curl);
+        curl_close($curl);
+
+        $response = json_decode($response, true);
+
+        // return $this->output->set_status_header(200)->set_content_type('application/json')->set_output(json_encode($response));
+
+        $orderSNImplode = '"' . implode('","', $orderSN) . '"';
+
+        $dataOrder = $this->db->query("SELECT * FROM sales_marketplace_header WHERE code_order_marketplace IN($orderSNImplode)")->result();
+
+        // return $this->output->set_status_header(200)->set_content_type('application/json')->set_output(json_encode($dataOrder));
+        
+        $data = [];
+        foreach($response['response']['order_list'] AS $order) {
+            foreach ($dataOrder AS $dataorder) {
+                if ($dataorder->code_order_marketplace == $order['order_sn']) {
+                    $totalOrder = 0;
+
+                    // return $this->output->set_status_header(200)->set_content_type('application/json')->set_output(json_encode($this->getDelivery($order['shipping_carrier'])));
+
+                    foreach($order['item_list'] AS $product) {
+                        $totalOrder += $product['model_quantity_purchased'];
+                        $sku = $product['model_sku'];
+
+                        $itemProduct = $this->db->query("SELECT * FROM ms_inventory_category3 WHERE sku_varian = '$sku'")->row();
+                        // return $this->output->set_status_header(200)->set_content_type('application/json')->set_output(json_encode($itemProduct));
+
+                        $dataDetail = [
+                            'code_order' => $dataorder->code_order,
+                            'product_id' => $itemProduct->id,
+                            'price' => $itemProduct->price,
+                            'qty' => $product['model_quantity_purchased'],
+                            'total_price' => $itemProduct->price * $product['model_quantity_purchased'],
+                            'total_price_ppn' => ($product['model_original_price'] * 11/100) + ($itemProduct->price * $product['model_quantity_purchased']),
+                            'created_at' => date('Y-m-d H:i:s'),
+                            'created_by' => 0
+                        ];
+
+                        $this->db->insert('sales_marketplace_detail', $dataDetail);
+                    }
+
+                    $data = [
+                        'customer_name' => $order['buyer_username'],
+                        'delivery_date' => date('Y-m-d', $order['ship_by_date']),
+                        'delivery_service_id' => $this->getDelivery($order['shipping_carrier']),
+                        'total_price' => $order['total_amount'],
+                        'updated_at' => date('Y-m-d H:i:s'),
+                        'updated_by' => 0,
+                        'status' => 1,
+                        'total_qty' => $totalOrder
+                    ];
+
+                    $this->db->where("code_order", $dataorder->code_order);
+                    $this->db->update("sales_marketplace_header", $data);
+                }
+            }
+        }
+
+        // return $this->output->set_status_header(200)->set_content_type('application/json')->set_output(json_encode($response));
+        // return redirect('/Shopee_API', 'refresh');
+    }
+
     protected function str_contains($haystack, $needle) {
         return $needle !== '' && mb_strpos($haystack, $needle) !== false;
     }
