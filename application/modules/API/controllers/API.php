@@ -511,13 +511,14 @@ class API extends Base_Controller
                     $totalOrder = 0;
 
                     // return $this->output->set_status_header(200)->set_content_type('application/json')->set_output(json_encode($this->getDelivery($order['shipping_carrier'])));
-                    print_r($order['item_list']);
-                    die();
+                    //print_r($order['item_list']);
+                    //die();
                     foreach($order['item_list'] AS $product) {
                         $totalOrder += $product['model_quantity_purchased'];
-                        $sku = $product['model_sku'];
+                        $sku = $product['model_sku'];//version old not used
+                        $item_sku = $product['item_sku'];
 
-                        $itemProduct = $this->db->query("SELECT * FROM ms_inventory_category3 WHERE sku_varian = '$sku'")->row();
+                        $itemProduct = $this->db->query("SELECT * FROM ms_inventory_category3 WHERE sku_varian = '$item_sku'")->row();
                         print_r($itemProduct);
                         die();
                         // return $this->output->set_status_header(200)->set_content_type('application/json')->set_output(json_encode($itemProduct));
