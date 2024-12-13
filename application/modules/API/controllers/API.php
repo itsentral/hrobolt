@@ -491,7 +491,14 @@ class API extends Base_Controller
 
         // return $this->output->set_status_header(200)->set_content_type('application/json')->set_output(json_encode($response));
 
-        $orderSNImplode = '"' . implode('","', $orderSN) . '"';
+        if (strpos($orderSNImplode, ',') !== false) {
+            // echo "Data mengandung koma.";
+            $orderSNImplode = implode(",", $orderSNImplode);
+        } else {
+            // echo "Data tidak mengandung koma.";
+            $orderSNImplode = $orderSNImplode;
+        }
+        // $orderSNImplode = '"' . implode('","', $orderSN) . '"';//version old hide
 
         $dataOrder = $this->db->query("SELECT * FROM sales_marketplace_header WHERE code_order_marketplace IN($orderSNImplode)")->result();
 
