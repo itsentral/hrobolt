@@ -555,7 +555,7 @@ class API extends Base_Controller
         }
 
         // return $this->output->set_status_header(200)->set_content_type('application/json')->set_output(json_encode($response));
-        // return redirect('/Shopee_API', 'refresh');
+        return redirect('/Shopee_API', 'refresh');
     }
 
     protected function str_contains($haystack, $needle) {
