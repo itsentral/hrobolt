@@ -55,15 +55,51 @@
                                         <tr>
                                             <th>No.</th>
                                             <th>Code Order</th>
+                                            <th>Date Order</th>
+                                            <th>Status Order</th>
                                         </tr>
                                     </thead>
                                     <tbody id="tbody-all-order">
                                         <?php 
                                             foreach($results['orders'] AS $key => $order) {
+                                                if($order->status == 0 )
+                                                {
+                                                    $Status = "<span class='badge bg-grey'>Draft</span>";
+                                                }
+                                                elseif($order->status == 1 )
+                                                {
+                                                    $Status = "<span class='badge bg-yellow'>Menunggu Approval</span>";
+                                                }
+                                                elseif($order->status == 2 )
+                                                {
+                                                    $Status = "<span class='badge bg-green'>Approved</span>";
+                                                }
+                                                elseif($order->status == 3 )
+                                                {
+                                                    $Status = "<span class='badge bg-blue'>Dicetak</span>";
+                                                }
+                                                elseif($order->status == 4 )
+                                                {
+                                                    $Status = "<span class='badge bg-green'>Terkirim</span>";
+                                                }
+                                                elseif($order->status == 5 )
+                                                {
+                                                    $Status = "<span class='badge bg-red'>Not Approved</span>";
+                                                }
+                                                elseif($order->status == 6 )
+                                                {
+                                                    $Status = "<span class='badge bg-green'>SO</span>";
+                                                }
+                                                elseif($order->status == 7 )
+                                                {
+                                                    $Status = "<span class='badge bg-red'>Loss</span>";
+                                                }
                                         ?>
                                             <tr>
                                                 <td><input type="checkbox" value="<?= $order->code_order_marketplace ?>" name="code_order[]"></td>
                                                 <td><?= $order->code_order_marketplace ?></td>
+                                                <td><?= $order->delivery_date ?></td>
+                                                <td><?= $Status ?></td>
                                             </tr>
                                         <?php
                                             }
