@@ -342,6 +342,7 @@ class API extends Base_Controller
         }
 
         // return $this->output->set_status_header(200)->set_content_type('application/json')->set_output(json_encode($response));
+        $this->session->set_flashdata('form_data', $this->input->post());
         return redirect('/Shopee_API', 'refresh');
     }
 

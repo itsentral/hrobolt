@@ -16,29 +16,32 @@
                             <li>Kemudian Data Akan Muncul di Table.</li>
                             <li>Lalu, lakukan checklist terhadap Code Order dari Shopee untuk diambil data detailnya dengan menekan Button Get Order Detail.</li>
                         </ol> -->
+                        <?php
+                        $form_data = $this->session->userdata('form_data');
+                        ?>
                         <div class="row" style="padding: 10px;">
                             <div class="col-md-4">
                                 <h4>Rentang Tanggal hanya untuk 15 Hari</h4>
                                 <form method="POST" action="<?= base_url('API/getOrderList') ?>">
                                     <div class="form-group">
                                         <label for="">Tanggal Order Mulai</label>
-                                        <input type="date" class="form-control" id="date_form" name="date_form" />
+                                        <input type="date" class="form-control" id="date_form" name="date_form" value="<?php echo isset($form_data['date_form']) ? $form_data['date_form'] : ''; ?>" />
                                     </div>
                                     <div class="form-group">
                                         <label for="">Tanggal Order Selesai</label>
-                                        <input type="date" class="form-control" id="date_to" name="date_to" />
+                                        <input type="date" class="form-control" id="date_to" name="date_to" value="<?php echo isset($form_data['date_to']) ? $form_data['date_to'] : ''; ?>" />
                                     </div>
                                     <div class="form-group">
                                         <label for="">Status Order</label>
                                         <select class="form-control" id="status_order" name="status_order">
                                             <option>Silahkan Pilih</option>
-                                            <option value="UNPAID">UNPAID</option>
-                                            <option value="READY_TO_SHIP">READY_TO_SHIP</option>
-                                            <option value="PROCESSED">PROCESSED</option>
-                                            <option value="SHIPPED">SHIPPED</option>
-                                            <option value="COMPLETED">COMPLETED</option>
-                                            <option value="IN_CANCEL">IN_CANCEL</option>
-                                            <option value="CANCELLED">CANCELLED</option>
+                                            <option value="UNPAID" <?php if($form_data['status_order'] == 'UNPAID' ){ echo "selected"; } ?> >UNPAID</option>
+                                            <option value="READY_TO_SHIP" <?php if($form_data['status_order'] == 'READY_TO_SHIP' ){ echo "selected"; } ?> >READY_TO_SHIP</option>
+                                            <option value="PROCESSED" <?php if($form_data['status_order'] == 'PROCESSED' ){ echo "selected"; } ?> >PROCESSED</option>
+                                            <option value="SHIPPED" <?php if($form_data['status_order'] == 'SHIPPED' ){ echo "selected"; } ?> >SHIPPED</option>
+                                            <option value="COMPLETED" <?php if($form_data['status_order'] == 'COMPLETED' ){ echo "selected"; } ?> >COMPLETED</option>
+                                            <option value="IN_CANCEL" <?php if($form_data['status_order'] == 'IN_CANCEL' ){ echo "selected"; } ?> >IN_CANCEL</option>
+                                            <option value="CANCELLED" <?php if($form_data['status_order'] == 'CANCELLED' ){ echo "selected"; } ?> >CANCELLED</option>
                                         </select>
                                     </div>
 
