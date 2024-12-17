@@ -125,6 +125,10 @@
 </style>
 
 <script type="text/javascript">
+	document.getElementById('data-form').onsubmit = function() {
+		document.getElementById('save').disabled = true; // Disable tombol
+	};
+
 	//$('#input-kendaraan').hide();
 	var base_url = '<?php echo base_url(); ?>';
 	var active_controller = '<?php echo ($this->uri->segment(1)); ?>';
