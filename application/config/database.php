@@ -73,14 +73,22 @@ defined('BASEPATH') or exit('No direct script access allowed');
 */
 $active_group = 'default';
 $query_builder = true;
-
+if ($_SERVER['HTTP_HOST'] === 'localhost' || strpos($_SERVER['HTTP_HOST'], '127.0.0.1') !== false) {//untuk local
 $db['default'] = array(
     'dsn' => '',
     'hostname' => 'localhost',
+<<<<<<< HEAD
     'username' => 'appsystem',
     //'password' => '',
     'password' => 'appsystem@ssc',
     //'password' => 'sentral2022**',
+=======
+    'username' => 'root',
+    'password' => '',
+    // 'username' => 'appsystem',
+    // 'password' => 'appsystem@ssc',
+    // 'password' => 'sentral2022**',
+>>>>>>> 46ad51dda7a8cf616871750896e7a24dc194b246
     'database' => 'hirobolt',
     'dbdriver' => 'mysqli',
     'dbprefix' => '',
@@ -97,6 +105,57 @@ $db['default'] = array(
     'failover' => array(),
     'save_queries' => true,
 );
+}elseif($_SERVER['HTTP_HOST'] != 'localhost' && $_SERVER['REQUEST_URI'] == 'hirobolt'){//untuk live apps
+    $db['default'] = array(
+        'dsn' => '',
+        'hostname' => 'localhost',
+        // 'username' => 'root',
+        // 'password' => '',
+        'username' => 'appsystem',
+        'password' => 'appsystem@ssc',
+        // 'password' => 'sentral2022**',
+        'database' => 'hirobolt',
+        'dbdriver' => 'mysqli',
+        'dbprefix' => '',
+        'pconnect' => false,
+        'db_debug' => (ENVIRONMENT !== 'production'),
+        'cache_on' => false,
+        'cachedir' => '',
+        'char_set' => 'utf8',
+        'dbcollat' => 'utf8_general_ci',
+        'swap_pre' => '',
+        'encrypt' => false,
+        'compress' => false,
+        'stricton' => false,
+        'failover' => array(),
+        'save_queries' => true,
+    );
+}else{//untuk program apps testing
+    $db['default'] = array(
+        'dsn' => '',
+        'hostname' => 'localhost',
+        // 'username' => 'root',
+        // 'password' => '',
+        'username' => 'appsystem',
+        'password' => 'appsystem@ssc',
+        // 'password' => 'sentral2022**',
+        'database' => 'hirobolt_dev',
+        'dbdriver' => 'mysqli',
+        'dbprefix' => '',
+        'pconnect' => false,
+        'db_debug' => (ENVIRONMENT !== 'production'),
+        'cache_on' => false,
+        'cachedir' => '',
+        'char_set' => 'utf8',
+        'dbcollat' => 'utf8_general_ci',
+        'swap_pre' => '',
+        'encrypt' => false,
+        'compress' => false,
+        'stricton' => false,
+        'failover' => array(),
+        'save_queries' => true,
+    );
+}
 
 $db['cms'] = array(
     'dsn' => '',
