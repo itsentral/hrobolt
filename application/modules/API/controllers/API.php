@@ -68,6 +68,24 @@ class API extends Base_Controller
     	}
     }
 
+    public function logins(){
+        // print_r($this->auth->is_login());die();
+        if($this->auth->is_login() == true)
+        {
+            $data_session	= $this->session->userdata;
+            $app_session = $this->session->userdata('app_session');
+            $username = $this->session->userdata['app_session']['username'];
+            $ip_address = ($this->ci->input->ip_address()) == "::1" ? "127.0.0.1" : $this->ci->input->ip_address();
+            $this->ci->users_model->update($this->user_id(), array('login_terakhir' => date('Y-m-d H:i:s'), 'ip' => $ip_address));
+            // print_r($username);die();
+            redirect('/');
+			// redirect('https://sentral.dutastudy.com/metalsindo_dev/');
+        }
+        // else{
+        //     print_r('Gagal Login');
+        // }
+    }
+
     protected function logout()
     {
         $this->ci->session->sess_destroy();
@@ -85,7 +103,8 @@ class API extends Base_Controller
 
     public function authShop()
     {
-        $this->login();
+        // $this->login();//version old
+        $this->logins();//version new
 
         $path = "/api/v2/shop/auth_partner";
         $redirectURL = "https://sentral.dutastudy.com/";
@@ -104,7 +123,7 @@ class API extends Base_Controller
         $path = '/api/v2/auth/token/get';
 
         $timestamp = time();
-        
+        // print_r($timestamp);die();
         $body = [
             "code" => $this->shopCode,
             "shop_id" => $this->shopId,
@@ -114,20 +133,33 @@ class API extends Base_Controller
         $sign = $this->makeSign($path);
         $url = sprintf("%s%s?timestamp=%s&partner_id=%s&sign=%s", $this->url, $path, $timestamp, $this->partnerId, $sign);
 
-        // echo $url;
+        //echo $sign;echo "<br>";
+        //echo $url;echo "<br>";
+        // die();
 
         $c = curl_init($url);
         curl_setopt($c, CURLOPT_POST, 1);
         curl_setopt($c, CURLOPT_POSTFIELDS, json_encode($body));
         curl_setopt($c, CURLOPT_HTTPHEADER, array('Content-Type: application/json'));
         curl_setopt($c, CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt($c, CURLOPT_CAINFO, "C:/xampp_5_6/php/extras/ssl/cacert.pem");
         $resp = curl_exec($c);
 
         $ret = json_decode($resp, true);
+        //print_r($ret);
+        $response = curl_exec($c);
+        //print_r($response);
+        // if ($response === false) {
+        //     echo 'Kesalahan: ' . curl_error($c);
+        // } else {
+        //     echo 'done';
+        //     // Olah data yang diterima dari API
+        // }
+        //die();
         $accessToken = $ret["access_token"];
         $newRefreshToken = $ret["refresh_token"];
-        // echo "\naccess_token: $accessToken, refresh_token: $newRefreshToken raw: $ret"."\n";
-
+        //echo "\naccess_token: $accessToken, refresh_token: $newRefreshToken raw: $ret"."\n";
+        //die();
         if (isset($accessToken)) {
             $dataAccessToken = [
                 'value' => $accessToken,
@@ -310,10 +342,11 @@ class API extends Base_Controller
         }
 
         // return $this->output->set_status_header(200)->set_content_type('application/json')->set_output(json_encode($response));
+        $this->session->set_flashdata('form_data', $this->input->post());
         return redirect('/Shopee_API', 'refresh');
     }
 
-    public function getOrderListDetail()
+    public function getOrderListDetail_version_old()//from fadli
     {
         $this->getAccessTokenShopLevel();
 
@@ -410,6 +443,122 @@ class API extends Base_Controller
         return redirect('/Shopee_API', 'refresh');
     }
 
+    public function getOrderListDetail()
+    {
+        $this->getAccessTokenShopLevel();
+
+        $accessToken = $this->db->query("SELECT * FROM app_parameter WHERE code = 'SAT'")->row();
+        $path = "/api/v2/order/get_order_detail";
+        $time = time();
+        $orderSN = $this->input->post('code_order'); // dynammic
+        // $orderSN = '2412064B7WS5QW';
+        if (strpos($orderSN, ',') !== false) {
+            // echo "Data mengandung koma.";
+            $orderSNImplode = implode(",", $orderSN);
+        } else {
+            // echo "Data tidak mengandung koma.";
+            $orderSNImplode = $orderSN;
+        }
+        // $orderSNImplode = implode(",", $orderSN);//version old hide
+        // $orderSNComma = str_replace(",", "2%C", implode(",", $orderSN));
+        $orderOptional = "buyer_user_id,buyer_username,estimated_shipping_fee,recipient_address,actual_shipping_fee,item_list,pay_time,actual_shipping_fee_confirmed,fulfillment_flag,pickup_done_time,package_list,shipping_carrier,payment_method,total_amount,buyer_username,invoice_data";
+
+        $baseString = sprintf("%s%s%s%s%s", $this->partnerId, $path, $time, $accessToken->value, $this->shopId);
+        $sign = hash_hmac('sha256', $baseString, $this->partnerKey);
+        $parameter = sprintf("?timestamp=%s&access_token=%s&order_sn_list=%s&partner_id=%s&response_optional_fields=%s&shop_id=%s&sign=%s", 
+                            $time, $accessToken->value, $orderSNImplode, $this->partnerId, $orderOptional, $this->shopId, $sign);
+        $url = $this->url . $path . $parameter;
+
+        $curl = curl_init();
+
+        curl_setopt_array($curl, array(
+            CURLOPT_URL => $url,
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_ENCODING => '',
+            CURLOPT_MAXREDIRS => 10,
+            CURLOPT_TIMEOUT => 0,
+            CURLOPT_FOLLOWLOCATION => true,
+            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+            CURLOPT_CUSTOMREQUEST => 'GET',
+            CURLOPT_HTTPHEADER => array(
+                'Content-Type: application/json'
+            ),
+        ));
+
+        $response = curl_exec($curl);
+        curl_close($curl);
+
+        $response = json_decode($response, true);
+
+        // return $this->output->set_status_header(200)->set_content_type('application/json')->set_output(json_encode($response));
+
+        if (strpos($orderSNImplode, ',') !== false) {
+            // echo "Data mengandung koma.";
+            $orderSNImplode = implode(",", $orderSNImplode);
+        } else {
+            // echo "Data tidak mengandung koma.";
+            $orderSNImplode = $orderSNImplode;
+        }
+        // $orderSNImplode = '"' . implode('","', $orderSN) . '"';//version old hide
+
+        $dataOrder = $this->db->query("SELECT * FROM sales_marketplace_header WHERE code_order_marketplace IN('$orderSNImplode')")->result();
+
+        // return $this->output->set_status_header(200)->set_content_type('application/json')->set_output(json_encode($dataOrder));
+        
+        $data = [];
+        foreach($response['response']['order_list'] AS $order) {
+            foreach ($dataOrder AS $dataorder) {
+                if ($dataorder->code_order_marketplace == $order['order_sn']) {
+                    $totalOrder = 0;
+
+                    // return $this->output->set_status_header(200)->set_content_type('application/json')->set_output(json_encode($this->getDelivery($order['shipping_carrier'])));
+                    //print_r($order['item_list']);
+                    //die();
+                    foreach($order['item_list'] AS $product) {
+                        $totalOrder += $product['model_quantity_purchased'];
+                        $sku = $product['model_sku'];//version old not used
+                        $item_sku = $product['item_sku'];
+
+                        $itemProduct = $this->db->query("SELECT * FROM ms_inventory_category3 WHERE sku_varian = '$item_sku'")->row();
+                        // print_r("test 1");
+                        //die();
+                        // return $this->output->set_status_header(200)->set_content_type('application/json')->set_output(json_encode($itemProduct));
+
+                        $dataDetail = [
+                            'code_order' => $dataorder->code_order,
+                            'product_id' => $itemProduct->id,
+                            'price' => $itemProduct->price,
+                            'qty' => $product['model_quantity_purchased'],
+                            'total_price' => $itemProduct->price * $product['model_quantity_purchased'],
+                            'total_price_ppn' => ($product['model_original_price'] * 11/100) + ($itemProduct->price * $product['model_quantity_purchased']),
+                            'created_at' => date('Y-m-d H:i:s'),
+                            'created_by' => 0
+                        ];
+
+                        $this->db->insert('sales_marketplace_detail', $dataDetail);
+                    }
+
+                    $data = [
+                        'customer_name' => $order['buyer_username'],
+                        'delivery_date' => date('Y-m-d', $order['ship_by_date']),
+                        'delivery_service_id' => $this->getDelivery($order['shipping_carrier']),
+                        'total_price' => $order['total_amount'],
+                        'updated_at' => date('Y-m-d H:i:s'),
+                        'updated_by' => 0,
+                        'status' => 1,
+                        'total_qty' => $totalOrder
+                    ];
+
+                    $this->db->where("code_order", $dataorder->code_order);
+                    $this->db->update("sales_marketplace_header", $data);
+                }
+            }
+        }
+
+        // return $this->output->set_status_header(200)->set_content_type('application/json')->set_output(json_encode($response));
+        return redirect('/Shopee_API', 'refresh');
+    }
+
     protected function str_contains($haystack, $needle) {
         return $needle !== '' && mb_strpos($haystack, $needle) !== false;
     }
@@ -439,6 +588,10 @@ class API extends Base_Controller
                             $time, $accessToken->value, $this->partnerId, $this->shopId, $sign);
         $url = $this->url . $path . $parameter;
 
+        // echo $sign;echo "<br>";
+        //echo $url;echo "<br>";
+        //die();
+        
         $curl = curl_init();
 
         curl_setopt_array($curl, array(
@@ -489,6 +642,98 @@ class API extends Base_Controller
 
         return redirect('/Shopee_API', 'refresh');
     }
+
+    //start functon hanya tes data api
+    public function shop_info()//TESTING DONE
+    {
+        $this->getAccessTokenShopLevel();
+
+        $accessToken = $this->db->query("SELECT * FROM app_parameter WHERE code = 'SAT'")->row();
+        $path = '/api/v2/shop/get_shop_info';
+        $time = time();
+
+        $baseString = sprintf("%s%s%s%s%s", $this->partnerId, $path, $time, $accessToken->value, $this->shopId);
+        $sign = hash_hmac('sha256', $baseString, $this->partnerKey);
+        $parameter = sprintf("?timestamp=%s&access_token=%s&item_status=NORMAL&offset=0&page_size=30&partner_id=%s&shop_id=%s&sign=%s", 
+                            $time, $accessToken->value, $this->partnerId, $this->shopId, $sign);
+        $url = $this->url . $path . $parameter;
+
+        // echo $sign;echo "<br>";
+        //echo $url;echo "<br>";
+        //die();
+
+        $curl = curl_init();
+
+        curl_setopt_array($curl, array(
+            CURLOPT_URL => $url,
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_ENCODING => '',
+            CURLOPT_MAXREDIRS => 10,
+            CURLOPT_TIMEOUT => 0,
+            CURLOPT_FOLLOWLOCATION => true,
+            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+            CURLOPT_CUSTOMREQUEST => 'GET',
+            CURLOPT_HTTPHEADER => array(
+                'Content-Type: application/json'
+            ),
+        ));
+
+        $response = curl_exec($curl);
+        $response = json_decode($response, true);
+
+        curl_close($curl);
+        //contoh pemanggilan untuk data by one
+        print_r($response['shop_name']);
+        echo "<br>";
+        print_r($response);
+        die();
+    }
+
+    public function getDataCategory(){//TESTING DONE
+        $this->getAccessTokenShopLevel();
+
+        $accessToken = $this->db->query("SELECT * FROM app_parameter WHERE code = 'SAT'")->row();
+        $path = '/api/v2/product/get_category';
+        $time = time();
+
+        $baseString = sprintf("%s%s%s%s%s", $this->partnerId, $path, $time, $accessToken->value, $this->shopId);
+        $sign = hash_hmac('sha256', $baseString, $this->partnerKey);
+        $parameter = sprintf("?timestamp=%s&access_token=%s&item_status=NORMAL&offset=0&page_size=30&partner_id=%s&shop_id=%s&sign=%s", 
+                            $time, $accessToken->value, $this->partnerId, $this->shopId, $sign);
+        $url = $this->url . $path . $parameter;
+
+        $curl = curl_init();
+
+        curl_setopt_array($curl, array(
+            CURLOPT_URL => $url,
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_ENCODING => '',
+            CURLOPT_MAXREDIRS => 10,
+            CURLOPT_TIMEOUT => 0,
+            CURLOPT_FOLLOWLOCATION => true,
+            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+            CURLOPT_CUSTOMREQUEST => 'GET',
+            CURLOPT_HTTPHEADER => array(
+                'Content-Type: application/json'
+            ),
+        ));
+
+        $response = curl_exec($curl);
+        $response = json_decode($response, true);
+
+        curl_close($curl);
+
+        foreach ($response['response']['category_list'] AS $category) {
+            echo "<pre>";
+            print_r($category);
+            echo "</pre>";
+        }        
+
+        // echo $sign;echo "<br>";
+        // echo $url;echo "<br>";
+        die(); 
+    }
+    //end function hanya tes data api
 
     public function getDataProductDetail(array $itemId)
     {

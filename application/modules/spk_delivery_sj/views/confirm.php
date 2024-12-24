@@ -141,6 +141,7 @@
 			<div class="form-group row">
 				<div class="col-md-6">
 					<?php if (empty($tanda)) { ?>
+						<input type="hidden" name="total_product" id="total_product" value="<?= $totalProduct; ?>">
 						<button type="button" class="btn btn-primary" name="save" id="save">Save</button>
 					<?php } ?>
 					<button type="button" class="btn btn-danger" style='margin-left:5px;' name="back" id="back">Back</button>
@@ -337,7 +338,9 @@
 		$('#save').click(function(e) {
 			e.preventDefault();
 			let diterima_oleh = $('#diterima_oleh').val()
-			// console.log(no_surat_jalan)
+			let total_product = $('#total_product').val()
+			//console.log(total_product)
+			//exit();
 			if (diterima_oleh == '') {
 				swal({
 					title: "Error Message!",
@@ -346,7 +349,14 @@
 				});
 				return false;
 			}
-
+			if (total_product <= 0) {
+				swal({
+					title: "Error Message!",
+					text: 'Tidak dapat diproses, karena tidak ada barang !',
+					type: "warning"
+				});
+				return false;
+			}
 			swal({
 					title: "Are you sure ?",
 					text: "You will not be able to process again this data!",

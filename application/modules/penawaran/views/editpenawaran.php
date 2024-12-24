@@ -150,15 +150,15 @@
 								<table class='table table-bordered table-striped'>
 									<thead>
 										<tr class='bg-blue'>
-											
 											<th width='10%'>Nama Produk</th>
 											<th width='10%'>Spesifikasi</th>
 											<th width='10%'>Qty (Set)</th>
+											<th width='20%'>Qty Aktual</th>
 											<th width='10%'>Harga</th>
 											<th width='10%'>Diskon</th>									
 											<th width='10%'>Harga Diskon</th>										
 											<th width='20%'>Total Harga</th>																						
-											<th width='20%'>Aksi</th>
+											<th width='10%'>Aksi</th>
 										</tr>
 									</thead>
 									<tbody id="list_spk">
@@ -180,7 +180,7 @@
                                         <tr id='tr_$loop'>
                                            
                                             <td>
-                                                <select id='used_no_surat_$loop' name='dt[$loop][no_surat]' data-no='$loop' onchange='CariDetail($loop)' class='form-control select' required>
+                                                <select id='used_no_surat_$loop' name='dt[$loop][id_product]' data-no='$loop' onchange='CariDetail($loop)' class='form-control select' required>
                                                     <option value=''>-Pilih-</option>";	
                                                     foreach($material as $produk){
                                                         $select = $dt_spk->id_product == $produk->id ? 'selected' : '';				
@@ -188,13 +188,14 @@
                                                     }
                                         echo	"</select>
                                             </td>
-											<td id='spesifikasi_$loop'>$spesifikasiProduk</td>
-                                            <td id='nama_produk_$loop' hidden><input type='text' value='$dt_spk->nama_produk' class='form-control input-sm' readonly id='used_nama_produk_$loop' required name='dt[$loop][nama_produk]'></td>
-                                            <td id='qty_$loop'><input type='text' value='$dt_spk->qty' class='form-control input-sm' id='used_qty_$loop' required name='dt[$loop][qty]' onkeyup='HitungTotal($loop)'></td>
-                                            <td id='harga_satuan_$loop'><input type='text' value='" . number_format($dt_spk->harga_satuan) . "' class='form-control input-sm' id='used_harga_satuan_$loop' required name='dt[$loop][harga_satuan]' readonly></td>
-                                            <td id='diskon_$loop'><input type='text' value='$dt_spk->diskon' class='form-control'  id='used_diskon_$loop' required name='dt[$loop][diskon]' onkeyup='HitungTotal($loop)'></td>
-                                            <td id='nilai_diskon_$loop'><input type='text' value='" . number_format($dt_spk->nilai_diskon) . "' readonly class='form-control'  id='used_nilai_diskon_$loop' required name='dt[$loop][nilai_diskon]'></td>
-                                            <td id='total_harga_$loop'><input type='text' value='" . number_format($dt_spk->total_harga) . "' class='form-control input-sm total' id='used_total_harga_$loop' required name='dt[$loop][total_harga]' readonly></td>
+											<td id='spesifikasi_$loop'><input type='hidden' value='$dt_spk->no_surat' name='dt[$loop][no_surat]'> </td>
+											<td id='nama_produk_$loop' hidden><input type='text' value='$dt_spk->nama_produk' class='form-control input-sm' readonly id='used_nama_produk_$loop' required name='dt[$loop][nama_produk]'></td>
+											<td id='qty_$loop'><input type='text' value='$dt_spk->qty' class='form-control input-sm' id='used_qty_$loop' required name='dt[$loop][qty]' onkeyup='HitungTotal($loop)'></td>
+											<td id='qty_actual_$loop'></td>
+											<td id='harga_satuan_$loop'><input type='text' value='$dt_spk->harga_satuan' class='form-control input-sm' id='used_harga_satuan_$loop' required name='dt[$loop][harga_satuan]'></td>
+											<td id='diskon_$loop'><input type='text' value='$dt_spk->diskon' class='form-control'  id='used_diskon_$loop' required name='dt[$loop][diskon]' onblur='HitungTotal($loop)'></td>
+											<td id='nilai_diskon_$loop'><input type='text' value='$dt_spk->nilai_diskon' class='form-control'  id='used_nilai_diskon_$loop' required name='dt[$loop][nilai_diskon]'></td>
+											<td id='total_harga_$loop'><input type='text' value='$dt_spk->total_harga' class='form-control input-sm total' id='used_total_harga_$loop' required name='dt[$loop][total_harga]' readonly></td>
                                             <td align='center'>
                                                 <button type='button' class='btn btn-sm btn-danger' title='Hapus Data' data-role='qtip' onClick='return HapusItem($loop);'><i class='fa fa-close'></i></button>
                                             </td>

@@ -110,6 +110,14 @@ class Incoming_stok extends Admin_Controller
       $keterangan     = $data['keterangan'];
       $tanggal        = date('Y-m-d', strtotime($data['tanggal']));
 
+      // if (strpos($orderSN, ',') !== false) {
+      //   // echo "Data mengandung koma.";
+      //   $orderSNImplode = implode(",", $orderSN);
+      // } else {
+      //   // echo "Data tidak mengandung koma.";
+      //   $orderSNImplode = $orderSN;
+      // }
+
       if (!empty($data['Detail'])) {
         $detail = $data['Detail'];
       }
@@ -123,6 +131,15 @@ class Incoming_stok extends Admin_Controller
       $SUM_MAT          = 0;
 
       if (!empty($data['Detail'])) {
+        //start proteksi agar tidak terduplikasi
+        // $this->db->where('po_number', $product_name);
+        // $query = $this->db->get('material_planning_base_on_produksi');
+        // if ($query->num_rows() > 0) {
+        //   return true; // Produk sudah ada
+        // } else {
+        //   return false; // Produk belum ada
+        // }
+        //end proteksi agar tidak terduplikasi
         foreach ($detail as $val => $valx) {
           $qty_incoming   = str_replace(',', '', $valx['qty_in']);
           if ($qty_incoming > 0) {

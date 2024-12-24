@@ -130,6 +130,48 @@ class Penawaran extends Admin_Controller
 		";
 	}
 
+	function GetProdukRevisi()
+    {
+		$loop=$_GET['jumlah']+1;
+		
+		$customers = $this->penawaran_model->get_data('master_customers','deleted',$deleted);
+		
+		
+		$material = $this->db->query("SELECT a.* FROM ms_inventory_category3 a WHERE a.deleted !=1 ")->result();
+		
+		echo "
+		<tr id='tr_$loop'>
+			
+			<td style='width: 200px;'>
+				<select id='used_no_surat_$loop' name='dt[$loop][id_product]' data-no='$loop' onchange='CariDetail($loop)' class='form-control select' required>
+					<option value=''>-Pilih-</option>";					
+					foreach($material as $produk){
+					echo"<option value='$produk->id'>$produk->nama|$produk->sku_varian</option>";
+					}
+		//<td id='spesifikasi_$loop'></td>
+		//<td id='qty_actual_$loop'></td>
+		echo	"</select>
+			</td>
+			<td id='spesifikasi_$loop'></td>
+			<td id='nama_produk_$loop' hidden><input type='text' value='' class='form-control input-sm' readonly id='used_nama_produk_$loop' required name='dt[$loop][nama_produk]'></td>
+			<td id='qty_$loop'><input type='text' value='' class='form-control input-sm' id='used_qty_$loop' required name='dt[$loop][qty]' onkeyup='HitungTotal($loop)' placeholder='test1'></td>
+			<td id='qty_actual_$loop'></td>
+			<td id='harga_satuan_$loop'><input type='text' value='' class='form-control input-sm' id='used_harga_satuan_$loop' required name='dt[$loop][harga_satuan]' readonly placeholder='test2'></td>
+			<td id='stok_tersedia_$loop'><input type='text' value='' class='form-control input-sm' id='used_stok_tersedia_$loop' required name='dt[$loop][stok_tersedia]' onblur='HitungLoss($loop)' readonly placeholder='test3'></td>
+			<td id='potensial_loss_$loop'><input type='text' value='' class='form-control input-sm' id='used_potensial_loss_$loop' required name='dt[$loop][potensial_loss]' readonly></td>
+			<td id='compare_diskon_$loop' hidden><input type='text' value='' class='form-control'  id='used_compare_diskon_$loop' required name='dt[$loop][compare_diskon]'></td>
+			<td id='diskon_$loop'><input type='text' value='' class='form-control'  id='used_diskon_$loop' required name='dt[$loop][diskon]' onkeyup='HitungTotal($loop)'></td>
+			<td id='nilai_diskon_$loop' hidden><input type='text' value='' class='form-control'  id='used_nilai_diskon_$loop' required name='dt[$loop][nilai_diskon]'></td>
+			<td id='freight_cost_$loop'><input type='text' value='' class='form-control input-sm' id='used_freight_cost_$loop' required name='dt[$loop][freight_cost]'></td>
+			<td id='total_harga_$loop'><input type='text' value='' class='form-control input-sm total' id='used_total_harga_$loop' required name='dt[$loop][total_harga]' readonly></td>
+			<td align='center'>
+				<button type='button' class='btn btn-sm btn-danger' title='Hapus Data' data-role='qtip' onClick='return HapusItem($loop);'><i class='fa fa-close'></i></button>
+			</td>
+			
+		</tr>
+		";
+	}
+
     public function SaveNewPenawaran()
     {
         $this->auth->restrict($this->addPermission);
@@ -242,6 +284,10 @@ class Penawaran extends Admin_Controller
     {
         $this->auth->restrict($this->addPermission);
 		$post = $this->input->post();
+		//echo "<pre>";
+		//print_r($post);
+		//echo "</pre>";
+		//die();
 		$code		= $post['no_penawaran'];
 		$no_surat	= $post['no_surat'];
 		$this->db->trans_begin();
@@ -265,14 +311,38 @@ class Penawaran extends Admin_Controller
 		];
 			//Edit Data
           	$this->db->where('no_penawaran',$code)->update("tr_penawaran",$data);			
-
+			
+			  $select2 = $this->db->select('
+			  id_penawaran_detail,
+			  no_penawaran,
+			  id_product,
+			  nama_produk,
+			  id_bentuk,
+			  qty,
+			  harga_satuan,
+			  stok_tersedia,
+			  potensial_loss,
+			  diskon,
+			  freight_cost,
+			  total_harga,
+			  keterangan,
+			  revisi,
+			  created_by,
+			  created_on,
+			  modified_by,
+			  modified_on,
+			  nilai_diskon,
+			  diskon_compare
+			  ')->where('no_penawaran',$code)->get('tr_penawaran_detail');
+			
 			$numb1 =0;
-			foreach($_POST['dt'] as $used){
-				if(!empty($used['no_surat'])){
+			$dt = [];
+			foreach($_POST['dt'] as $key => $used ){
+				if(empty($used['no_surat'])){
 					$numb1++;   
-					$dt[] =  array(
+					$dt[$key] =  array(
 							'no_penawaran'		=> $code,
-							'id_product'		=> $used['no_surat'],
+							'id_product'		=> $used['id_product'],
 							'nama_produk'	    => $used['nama_produk'],
 							'qty'			    => $used['qty'],
 							'harga_satuan'		=> str_replace(',','',$used['harga_satuan']),
@@ -284,15 +354,27 @@ class Penawaran extends Admin_Controller
 							'created_on'		=> date('Y-m-d H:i:s'),
 							'created_by'		=> $this->auth->user_id(),
 							'nilai_diskon'		=> str_replace(',','',$used['nilai_diskon']),
-							'diskon_compare'	=> $used['compare_diskon']							
+							'diskon_compare'	=> $used['compare_diskon']
 						);
 				}
 			}
-		 //    print_r($dt);
-		 //    exit();
-		 $this->db->delete('tr_penawaran_detail',array('no_penawaran'=>$code));
-		 $this->db->insert_batch('tr_penawaran_detail',$dt);
+		//echo "<pre>";
+		//print_r($dt);
+		//echo "</pre>";
+		//die();
+		    //print_r($dt);
+		    //exit();
+		 //$this->db->delete('tr_penawaran_detail',array('no_penawaran'=>$code));
+		 //$this->db->insert_batch('tr_penawaran_detail',$dt);
+		 if($select2->num_rows()){
+			//$insert2 = $this->db->insert_batch('tr_penawaran_detail_history', $select2->result_array());
+			$this->db->delete('tr_penawaran_detail',array('no_penawaran'=>$code));
+			$this->db->insert_batch('tr_penawaran_detail',$dt);
+		}
 
+		 //print_r($this->db->trans_rollback());
+		 //print_r($this->db->trans_commit());
+		 //exit();
 		if($this->db->trans_status() === FALSE){
 			$this->db->trans_rollback();
 			$status	= array(
@@ -300,6 +382,7 @@ class Penawaran extends Admin_Controller
 			  'code' => $code,
 			  'status'	=> 0
 			);
+			//print_r('action 1');exit();
 		} else {
 			$this->db->trans_commit();
 			$status	= array(
@@ -307,8 +390,9 @@ class Penawaran extends Admin_Controller
 			  'code' => $code,
 			  'status'	=> 1
 			);
+			//print_r('action 2');exit();
 		}
-
+		//print_r('action 3');exit();
   		echo json_encode($status);
     }
 
@@ -865,7 +949,7 @@ class Penawaran extends Admin_Controller
 		$select2 = $this->db->select('
 		id_penawaran_detail,
 		no_penawaran,
-		id_category3,
+		id_product,
 		nama_produk,
 		id_bentuk,
 		qty,
@@ -935,11 +1019,11 @@ class Penawaran extends Admin_Controller
 							);
 				}
 			}
-		 //    print_r($dt);
-		 //    exit();
+		     //print_r($dt);
+		     //exit();
 		 if($select2->num_rows())
 		{
-			$insert2 = $this->db->insert_batch('tr_penawaran_detail_history', $select2->result_array());
+			//$insert2 = $this->db->insert_batch('tr_penawaran_detail_history', $select2->result_array());
 
 			$this->db->delete('tr_penawaran_detail',array('no_penawaran'=>$code));
 			$this->db->insert_batch('tr_penawaran_detail',$dt);

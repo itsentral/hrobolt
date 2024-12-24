@@ -182,11 +182,11 @@ thead input {
 		function(){
 		  $.ajax({
 			  type:'POST',
-			  url:siteurl+'inventory_1/deleteInventory',
+			  url:siteurl + active_controller + '/deleteInventory',
 			  dataType : "json",
 			  data:{'id':id},
 			  success:function(result){
-				  if(result.status == '1'){
+				  if(result.status == 1){
 					 swal({
 						  title: "Sukses",
 						  text : "Data Inventory berhasil dihapus.",

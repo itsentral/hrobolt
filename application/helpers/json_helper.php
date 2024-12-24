@@ -576,17 +576,24 @@ function getStokBarang($id_gudang)
 function getStokBarangAll()
 {
 	$CI = &get_instance();
+	// $warehouseData = $CI->db->get_where('warehouse')->row();
+	$warehouseIds = $CI->db->select('id')->get('warehouse')->result_array();
+	// Extract the IDs into a simple array
+	$idArray = array_column($warehouseIds, 'id');
+	// print_r($idArray);
 	$listGetCategory =	 $CI->db
 		->select('
-											a.id_material,
-											SUM(a.qty_stock) AS qty_stock,
-											b.konversi
-										')
+					a.id_material,
+					SUM(a.qty_stock) AS qty_stock,
+					b.konversi
+				')
 		->group_by('a.id_material')
-		->where_in('a.id_gudang', [17, 19, 21])
+		// ->where_in('a.id_gudang', [17, 19, 21, 2, 1])//version old from fadli
+		->where_in('a.id_gudang', $idArray)
 		->join('accessories b', 'a.id_material=b.id')
 		->get('warehouse_stock a')
 		->result_array();
+		//echo '<pre>' . $CI->db->last_query() . '</pre>';
 	$ArrGetCategory 	= [];
 	foreach ($listGetCategory as $key => $value) {
 		$stok_packing = 0;

@@ -182,7 +182,7 @@
   </form>
   <footer>
   <font color="white">  
-  <p>Copyright &copy; <?php echo $idt->nm_perusahaan;?> 2024</p>
+  <p>Copyrights &copy; <?php echo $idt->nm_perusahaan;?> 2024</p>
   <p>Halaman ini dimuat selama <strong>{elapsed_time}</strong> detik</p>
   </font>
 </footer>

@@ -127,7 +127,7 @@ thead input {
 								<?php foreach($results['dataMarketplace'] AS $marketplace) { 
 								?>
 								<option value="<?= $marketplace->name ?>"><?= $marketplace->name ?></option>
-								<?		
+								<?php		
 								} ?>
 							</select>
 						</div>
