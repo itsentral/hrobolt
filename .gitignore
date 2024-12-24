@@ -17,3 +17,6 @@ application/logs/*
 !application/logs/index.html
 !application/logs/.htaccess
 /vendor/
+assets/uploads/barcode_resi/*
+assets/files/penawaran/*
+assets/temp/*
