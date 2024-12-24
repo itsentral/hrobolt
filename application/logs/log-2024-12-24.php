@@ -26,3 +26,4 @@ ERROR - 2024-12-24 14:53:54 --> Query error: The user specified as a definer ('r
 				a.nm_asset LIKE '%%'
 				OR a.category LIKE '%%'
 	        )
+ERROR - 2024-12-24 08:56:33 --> 404 Page Not Found: /index
