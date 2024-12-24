@@ -73,7 +73,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
 */
 $active_group = 'default';
 $query_builder = true;
-if ($_SERVER['HTTP_HOST'] === 'localhost' || strpos($_SERVER['HTTP_HOST'], '127.0.0.1') !== false) {
+if ($_SERVER['HTTP_HOST'] === 'localhost' || strpos($_SERVER['HTTP_HOST'], '127.0.0.1') !== false) {//untuk local
 $db['default'] = array(
     'dsn' => '',
     'hostname' => 'localhost',
@@ -98,7 +98,7 @@ $db['default'] = array(
     'failover' => array(),
     'save_queries' => true,
 );
-}elseif($_SERVER['HTTP_HOST'] != 'localhost' && $_SERVER['REQUEST_URI'] == 'hirobolt'){
+}elseif($_SERVER['HTTP_HOST'] != 'localhost' && $_SERVER['REQUEST_URI'] == 'hirobolt'){//untuk live apps
     $db['default'] = array(
         'dsn' => '',
         'hostname' => 'localhost',
