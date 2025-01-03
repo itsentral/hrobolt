@@ -26,3 +26,20 @@ ERROR - 2024-12-24 14:53:54 --> Query error: The user specified as a definer ('r
 				a.nm_asset LIKE '%%'
 				OR a.category LIKE '%%'
 	        )
+ERROR - 2024-12-24 08:56:33 --> 404 Page Not Found: /index
+ERROR - 2024-12-24 09:20:51 --> 404 Page Not Found: /index
+ERROR - 2024-12-24 15:20:55 --> Query error: The user specified as a definer ('root'@'%') does not exist - Invalid query: SELECT
+				SUM(a.nilai_asset) AS total_aset,
+				SUM(a.`value`) AS total_susut,
+				SUM(b.sisa_nilai) AS total_sisa
+			FROM
+				asset a LEFT JOIN asset_nilai b ON a.kd_asset = b.kd_asset
+			WHERE 1=1
+				AND a.deleted = 'N'
+				
+				
+				AND (
+				a.nm_asset LIKE '%%'
+				OR a.category LIKE '%%'
+	        )
+ERROR - 2024-12-24 10:35:34 --> 404 Page Not Found: /index
