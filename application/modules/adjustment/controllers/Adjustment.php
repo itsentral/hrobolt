@@ -158,7 +158,7 @@ class Adjustment extends Admin_Controller
       }
       else{
 
-        $gudang	= $this->db->order_by('urut','asc')->get_where('warehouse',array('desc !='=>'stok','status'=>'Y'))->result_array();
+        $gudang	= $this->db->order_by('urut','asc')->get_where('warehouse',array('desc !='=>'stok','status'=>'Aktif'))->result_array();
         $data = array(
           'gudang'		=> $gudang,
         );
