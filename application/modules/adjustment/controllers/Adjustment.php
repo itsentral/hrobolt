@@ -226,7 +226,7 @@ class Adjustment extends Admin_Controller
         $restIpp	= $this->db->query($queryIpp)->result();
   
         if($tandax == 'MOVE'){
-          $whLef = " id != '".$gudang."' AND status = 'Y' ";
+          $whLef = " id != '".$gudang."' AND status = 'Aktif' ";
         }
         else{
           $whLef = " urut2 > ".$restIpp[0]->urut2;
